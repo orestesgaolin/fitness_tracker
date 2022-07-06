@@ -13,6 +13,7 @@ dependencies:
   database_client:
     path: packages/database_client
   equatable: ^2.0.3
+  flex_color_scheme: ^5.0.1
   flutter:
     sdk: flutter
   flutter_bloc: ^8.0.1
