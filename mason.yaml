@@ -1,4 +1,7 @@
 bricks:
   hello: 0.1.0+1
   app_ui: ^0.0.4
-  cubit_page: ^0.2.0
+  cubit_page:
+    git:
+      url: "https://github.com/orestesgaolin/mason_bricks"
+      path: cubit_page
