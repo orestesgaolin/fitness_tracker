@@ -7,7 +7,7 @@ class AppTextStyle {
   static const _baseTextStyle = TextStyle(
     package: 'app_ui',
     fontFamily: 'OpenSans',
-    color: AppColors.black,
+    color: AppColors.blackBackground,
     fontWeight: AppFontWeight.regular,
   );
 

@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 /// Defines the color palette for the App UI.
 abstract class AppColors {
   /// Black
-  static const Color black = Color(0xFF202124);
+  static const Color blackBackground = Color(0xFF242a2e);
 
   /// Black 54% opacity
   static const Color black54 = Color(0x8A000000);
@@ -11,33 +11,24 @@ abstract class AppColors {
   /// Black 25% opacity
   static const Color black25 = Color(0x40202124);
 
-  /// Gray b4b4b4
-  static const Color gray = Color(0xFFEBEBEB);
-
-  /// DarkGray
-  static const Color darkGray = Color(0xFFB4B4B4);
-
   /// White
   static const Color white = Color(0xFFFFFFFF);
 
-  /// WhiteBackground
-  static const Color whiteBackground = Color(0xFFE8EAED);
+  /// Disabled icon white
+  static const Color disabledIconWhite = Color(0xFF676c72);
 
   /// Transparent
   static const Color transparent = Color(0x00000000);
 
   /// Primary
-  static const Color primary = Color(0xFF0000FF);
+  static const Color primary = Color(0xFFf5bbeb);
 
-  /// Secondary
-  static const Color secondary = Color(0xFFFB5246);
+  /// Blue background
+  static const Color blueBackground = Color(0xFFe1f0f5);
 
-  /// Green
-  static const Color green = Color(0xFF3fBC5C);
+  /// Pink background
+  static const Color pinkBackground = Color(0xFFffeeee);
 
-  /// Orange
-  static const Color orange = Color(0xFFFFBB00);
-
-  /// Charcoal
-  static const Color charcoal = Color(0xBF202124);
+  /// Yellow background
+  static const Color yellowBackground = Color(0xFFfef5dd);
 }
