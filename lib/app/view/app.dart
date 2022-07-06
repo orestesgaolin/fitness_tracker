@@ -49,8 +49,13 @@ class App extends StatelessWidget {
           useMaterial3ErrorColors: true,
           visualDensity: FlexColorScheme.comfortablePlatformDensity,
           useMaterial3: true,
-          // To use the playground font, add GoogleFonts package and uncomment
-          // fontFamily: GoogleFonts.notoSans().fontFamily,
+          fontFamily: 'OpenSans',
+          textTheme: const TextTheme(
+            bodyText2: TextStyle(
+              package: 'app_ui',
+              fontFamily: 'OpenSans',
+            ),
+          ),
         ),
         themeMode: ThemeMode.light,
         localizationsDelegates: AppLocalizations.localizationsDelegates,

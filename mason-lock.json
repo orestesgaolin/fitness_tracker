@@ -1,1 +1,1 @@
-{"bricks":{"hello":"0.1.0+1","app_ui":"0.0.4","cubit_page":"0.2.0"}}
+{"bricks":{"hello":"0.1.0+1","app_ui":"0.0.4","cubit_page":{"git":{"url":"https://github.com/orestesgaolin/mason_bricks","path":"cubit_page","ref":"bb39144d34d2f6d99465fa32f1c75950cc978672"}}}}

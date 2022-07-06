@@ -1,4 +1,5 @@
 import 'package:app_ui/app_ui.dart';
+import 'package:fitness/dashboard/dashboard.dart';
 import 'package:fitness/home/home.dart';
 import 'package:fitness/weight_tracking/weight_tracking.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,7 @@ class HomeView extends StatelessWidget {
           IndexedStack(
             index: selectedPage.index,
             children: const [
-              SizedBox(),
+              DashboardPage(),
               WeightTrackingPage(),
               SizedBox(),
               SizedBox(),

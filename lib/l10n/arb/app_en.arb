@@ -1,7 +1,18 @@
 {
     "@@locale": "en",
-    "counterAppBarTitle": "Counter",
-    "@counterAppBarTitle": {
-        "description": "Text shown in the AppBar of the Counter Page"
+    "motivationalLabel": "Motivational Label",
+    "yourAreas": "Your Areas",
+    "workout": "Workout",
+    "addSession": "Add Session",
+    "weight": "Weight",
+    "update": "Update",
+    "steps": "Steps Today",
+    "stepsCount": "{count} steps",
+    "@stepsCount": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
     }
 }
