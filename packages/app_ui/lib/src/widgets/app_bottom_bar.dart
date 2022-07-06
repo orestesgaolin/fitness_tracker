@@ -1,7 +1,5 @@
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 /// {@template app_bottom_bar}
 /// Widget used as bottom navigation bar, wrapping the children with

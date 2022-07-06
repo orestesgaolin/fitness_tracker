@@ -5,12 +5,6 @@ abstract class AppColors {
   /// Black
   static const Color blackBackground = Color(0xFF242a2e);
 
-  /// Black 54% opacity
-  static const Color black54 = Color(0x8A000000);
-
-  /// Black 25% opacity
-  static const Color black25 = Color(0x40202124);
-
   /// White
   static const Color white = Color(0xFFFFFFFF);
 
@@ -31,4 +25,7 @@ abstract class AppColors {
 
   /// Yellow background
   static const Color yellowBackground = Color(0xFFfef5dd);
+
+  /// Light grey background
+  static const Color lightGrey = Color(0xFFf4f6f5);
 }
