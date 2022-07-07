@@ -62,6 +62,8 @@ class _HorizontalCalendarListViewState
         ),
         Positioned(
           right: 0,
+          top: 0,
+          bottom: 0,
           child: AnimatedBuilder(
             animation: scrollController,
             builder: (context, child) {
@@ -103,6 +105,7 @@ class ScrollCalendarTile extends StatelessWidget {
     final borderColor = selected ? Colors.transparent : Colors.black12;
     final textColor = selected ? Colors.white : Colors.black26;
     final subtitleColor = selected ? Colors.white38 : Colors.black26;
+    final textScale = MediaQuery.of(context).textScaleFactor;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: Material(
@@ -119,7 +122,7 @@ class ScrollCalendarTile extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
-                    width: 24,
+                    width: 28 * textScale,
                     child: Center(
                       child: Text(
                         title,
@@ -127,6 +130,8 @@ class ScrollCalendarTile extends StatelessWidget {
                           color: textColor,
                           fontSize: 20,
                         ),
+                        maxLines: 1,
+                        overflow: TextOverflow.fade,
                         textAlign: TextAlign.center,
                       ),
                     ),

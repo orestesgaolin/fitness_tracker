@@ -13,6 +13,7 @@ class DashboardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = context.watch<DashboardCubit>().state;
+    final textScale = MediaQuery.of(context).textScaleFactor;
     final l10n = context.l10n;
     return ListView(
       padding: const EdgeInsets.only(bottom: 140),
@@ -20,7 +21,7 @@ class DashboardView extends StatelessWidget {
         const SizedBox(height: 100),
         JumboLabel(l10n.motivationalLabel).paddedH(28),
         SizedBox(
-          height: 60,
+          height: 60 * textScale,
           child: HorizontalCalendarListView(
             startDate: state.startDate,
             selectedDate: state.selectedDate,
