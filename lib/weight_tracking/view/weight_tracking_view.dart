@@ -2,6 +2,7 @@ import 'package:fitness/weight_tracking/weight_tracking.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 class WeightTrackingView extends StatelessWidget {
   const WeightTrackingView({super.key});
@@ -9,26 +10,35 @@ class WeightTrackingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.watch<WeightTrackingCubit>();
-    return Column(
-      children: [
-        Expanded(
-          child: ListView.builder(
-            itemCount: cubit.state.weights.length,
-            itemBuilder: (context, index) {
-              final weight = cubit.state.weights[index];
-              return ListTile(
-                title: Text('Weight: ${weight.value}'),
-              );
-            },
+    return SafeArea(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: TextField(
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(hintText: 'Weight today'),
+              onSubmitted: (value) {
+                cubit.addWeight(double.tryParse(value));
+              },
+            ),
           ),
-        ),
-        TextField(
-          keyboardType: TextInputType.number,
-          onSubmitted: (value) {
-            cubit.addWeight(double.tryParse(value));
-          },
-        )
-      ],
+          Expanded(
+            child: ListView.builder(
+              itemCount: cubit.state.weights.length,
+              itemBuilder: (context, index) {
+                final weight = cubit.state.weights[index];
+                return ListTile(
+                  title: Text('Weight: ${weight.value}'),
+                  subtitle: Text(
+                    DateFormat('E, M/d, HH:mm').format(weight.timestamp),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
