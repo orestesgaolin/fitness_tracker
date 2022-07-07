@@ -4,6 +4,7 @@ import 'package:fitness/home/home.dart';
 import 'package:fitness/weight_tracking/weight_tracking.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:animations/animations.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({
@@ -13,18 +14,28 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final selectedPage = context.watch<HomeCubit>().state;
-
+    final pages = {
+      HomeSelection.home: const DashboardPage(),
+      HomeSelection.activity: const WeightTrackingPage(),
+      HomeSelection.alarms: const SizedBox(),
+      HomeSelection.settings: const SizedBox(),
+    };
     return Scaffold(
       body: Stack(
         children: [
-          IndexedStack(
-            index: selectedPage.index,
-            children: const [
-              DashboardPage(),
-              WeightTrackingPage(),
-              SizedBox(),
-              SizedBox(),
-            ],
+          PageTransitionSwitcher(
+            transitionBuilder: (
+              Widget child,
+              Animation<double> animation,
+              Animation<double> secondaryAnimation,
+            ) {
+              return FadeThroughTransition(
+                animation: animation,
+                secondaryAnimation: secondaryAnimation,
+                child: child,
+              );
+            },
+            child: pages[selectedPage],
           ),
           const Positioned(
             bottom: 0,
