@@ -14,5 +14,7 @@
                 "type": "int"
             }
         }
-    }
+    },
+    "allStats": "All Stats",
+    "allStatsSubtitle": "See progress"
 }
