@@ -5,3 +5,7 @@ bricks:
     git:
       url: "https://github.com/orestesgaolin/mason_bricks"
       path: cubit_page
+  repository:
+    git:
+      url: "https://github.com/orestesgaolin/mason_bricks"
+      path: repository

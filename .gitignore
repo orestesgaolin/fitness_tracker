@@ -126,3 +126,4 @@ app.*.map.json
 !.idea/dictionaries/
 !.idea/runConfigurations/
 detective_connect.txt
+.mason/

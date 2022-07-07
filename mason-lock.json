@@ -1,1 +1,1 @@
-{"bricks":{"hello":"0.1.0+1","app_ui":"0.0.4","cubit_page":{"git":{"url":"https://github.com/orestesgaolin/mason_bricks","path":"cubit_page","ref":"bb39144d34d2f6d99465fa32f1c75950cc978672"}}}}
+{"bricks":{"hello":"0.1.0+1","app_ui":"0.0.4","cubit_page":{"git":{"url":"https://github.com/orestesgaolin/mason_bricks","path":"cubit_page","ref":"bb39144d34d2f6d99465fa32f1c75950cc978672"}},"repository":{"git":{"url":"https://github.com/orestesgaolin/mason_bricks","path":"repository","ref":"810310694ecc51e37ea39927c45dd148a2add128"}}}}
