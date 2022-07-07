@@ -23,10 +23,13 @@ class MeasurementsRepository {
         .map((e) => e.map(Weight.fromDatabase).toList());
   }
 
-  Stream<Weight?> latestWeight() {
-    return databaseClient
-        .weightEntries(limit: 1, descending: true)
-        .map((e) => e.map(Weight.fromDatabase).firstOrNull);
+  Stream<WeightProgress> latestWeight() {
+    return databaseClient.weightEntries(limit: 2, descending: true).map(
+      (e) {
+        final previousValue = e.length == 2 ? e[1] : e[0];
+        return WeightProgress(e.first.value, previousValue.value);
+      },
+    );
   }
 }
 
@@ -44,4 +47,15 @@ class Weight extends Equatable {
 
   @override
   List<Object?> get props => [value, timestamp];
+}
+
+class WeightProgress extends Equatable {
+  const WeightProgress(this.value, double? previousValue)
+      : offset = value - (previousValue ?? value);
+
+  final double value;
+  final double offset;
+
+  @override
+  List<Object?> get props => [value, offset];
 }

@@ -71,6 +71,9 @@ class DashboardView extends StatelessWidget {
                   ),
                   DashboardCard(
                     title: l10n.weight,
+                    subtitle: state.weightChange >= 0
+                        ? '+${state.weightChange}'
+                        : '${state.weightChange}',
                     value: state.weight.toStringAsFixed(1),
                     color: AppColors.yellowBackground,
                     onTap: () {
@@ -78,6 +81,7 @@ class DashboardView extends StatelessWidget {
                         context,
                         child: WeightSelectionLayout(
                           initialWeight: state.weight,
+                          onSubmitted: (value) {},
                           onChanged: (value) {
                             //TODO(dominik): handle selected value
                           },

@@ -6,12 +6,14 @@ class DashboardState extends Equatable {
     DateTime? selectedDate,
     this.steps = 0,
     this.weight = 0,
+    this.weightChange = 0,
     this.hasWorkoutSession = false,
   })  : startDate = startDate ?? DateTime.now().stripDetails(),
         selectedDate = selectedDate ?? DateTime.now().stripDetails();
 
   final int steps;
   final double weight;
+  final double weightChange;
   final bool hasWorkoutSession;
   final DateTime startDate;
   final DateTime selectedDate;
@@ -21,6 +23,7 @@ class DashboardState extends Equatable {
     return [
       steps,
       weight,
+      weightChange,
       hasWorkoutSession,
       startDate,
       selectedDate,
@@ -30,6 +33,7 @@ class DashboardState extends Equatable {
   DashboardState copyWith({
     int? steps,
     double? weight,
+    double? weightChange,
     bool? hasWorkoutSession,
     DateTime? startDate,
     DateTime? selectedDate,
@@ -37,6 +41,7 @@ class DashboardState extends Equatable {
     return DashboardState(
       steps: steps ?? this.steps,
       weight: weight ?? this.weight,
+      weightChange: weightChange ?? this.weightChange,
       hasWorkoutSession: hasWorkoutSession ?? this.hasWorkoutSession,
       startDate: startDate ?? this.startDate,
       selectedDate: selectedDate ?? this.selectedDate,
