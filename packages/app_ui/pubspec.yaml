@@ -11,11 +11,13 @@ dependencies:
   flutter:
     sdk: flutter
   gap: ^2.0.0
+  infinite_listview: ^1.1.0
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  very_good_analysis: ^2.0.4
+  very_good_analysis: ^2.4.0
 
 flutter:
   fonts:

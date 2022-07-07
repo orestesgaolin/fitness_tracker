@@ -48,13 +48,7 @@ class DashboardCard extends StatelessWidget {
                 value!,
                 style: const TextStyle(fontSize: 45),
               ),
-            Text(
-              title,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
-            ),
+            HeaderLabel(title),
             const Gap(6),
             if (subtitle != null)
               Text(
