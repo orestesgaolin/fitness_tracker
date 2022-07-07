@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs
 
+import 'package:collection/collection.dart';
 import 'package:database_client/database_client.dart';
 import 'package:equatable/equatable.dart';
 
@@ -19,7 +20,13 @@ class MeasurementsRepository {
   Stream<List<Weight>> weights() {
     return databaseClient
         .weightEntries()
-        .map((e) => e.map((e) => Weight.fromDatabase(e)).toList());
+        .map((e) => e.map(Weight.fromDatabase).toList());
+  }
+
+  Stream<Weight?> latestWeight() {
+    return databaseClient
+        .weightEntries(limit: 1, descending: true)
+        .map((e) => e.map(Weight.fromDatabase).firstOrNull);
   }
 }
 

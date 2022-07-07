@@ -71,8 +71,19 @@ class DashboardView extends StatelessWidget {
                   ),
                   DashboardCard(
                     title: l10n.weight,
-                    value: '69.9',
+                    value: state.weight.toStringAsFixed(1),
                     color: AppColors.yellowBackground,
+                    onTap: () {
+                      AppBottomSheet.present<void>(
+                        context,
+                        child: WeightSelectionLayout(
+                          initialWeight: state.weight,
+                          onChanged: (value) {
+                            //TODO(dominik): handle selected value
+                          },
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),

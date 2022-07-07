@@ -1,4 +1,4 @@
-// ignore_for_file: always_use_package_imports, unused_import, public_member_api_docs
+// ignore_for_file: public_member_api_docs
 
 import 'dart:io';
 
@@ -18,8 +18,17 @@ class DatabaseClient extends _$DatabaseClient {
   @override
   int get schemaVersion => 1;
 
-  Stream<List<WeightEntry>> weightEntries() {
-    return (select(weightEntryModel)).watch();
+  Stream<List<WeightEntry>> weightEntries({
+    int limit = 0,
+    bool descending = false,
+  }) {
+    final mode = descending ? OrderingMode.desc : OrderingMode.asc;
+    final query = select(weightEntryModel)
+      ..orderBy([(t) => OrderingTerm(expression: t.timestamp, mode: mode)]);
+    if (limit != 0) {
+      query.limit(limit);
+    }
+    return query.watch();
   }
 
   Future<int> saveWeight(double value, DateTime timestamp) async {

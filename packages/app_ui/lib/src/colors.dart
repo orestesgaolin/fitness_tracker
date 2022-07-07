@@ -29,3 +29,12 @@ abstract class AppColors {
   /// Light grey background
   static const Color lightGrey = Color(0xFFf4f6f5);
 }
+
+extension ColorExt on Color {
+  Color darken([double amount = .1]) {
+    final hsl = HSLColor.fromColor(this);
+    final hslDark = hsl.withLightness((hsl.lightness - amount).clamp(0.0, 1.0));
+
+    return hslDark.toColor();
+  }
+}
