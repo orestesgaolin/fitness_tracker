@@ -1,5 +1,6 @@
 import 'package:app_ui/app_ui.dart';
 import 'package:fitness/dashboard/dashboard.dart';
+import 'package:fitness/home/home.dart';
 import 'package:fitness/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +15,7 @@ class DashboardView extends StatelessWidget {
     final state = context.watch<DashboardCubit>().state;
     final l10n = context.l10n;
     return ListView(
+      padding: const EdgeInsets.only(bottom: 140),
       children: [
         const SizedBox(height: 100),
         JumboLabel(l10n.motivationalLabel).paddedH(28),
@@ -39,6 +41,9 @@ class DashboardView extends StatelessWidget {
                     title: l10n.allStats,
                     subtitle: l10n.allStatsSubtitle,
                     color: AppColors.lightGrey,
+                    onTap: () {
+                      context.read<HomeCubit>().setPage(HomeSelection.activity);
+                    },
                   ),
                   DashboardCard(
                     title: l10n.steps,

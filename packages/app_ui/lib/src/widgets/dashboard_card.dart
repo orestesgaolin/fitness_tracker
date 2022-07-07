@@ -16,6 +16,7 @@ class DashboardCard extends StatelessWidget {
     this.emoji,
     this.value,
     required this.color,
+    this.onTap,
   });
 
   final String title;
@@ -23,42 +24,49 @@ class DashboardCard extends StatelessWidget {
   final String? emoji;
   final String? value;
   final Color color;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: color,
-      margin: const EdgeInsets.all(8),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 32,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (emoji != null)
-              Text(
-                emoji!,
-                style: const TextStyle(fontSize: 45),
-              ),
-            if (emoji != null) const Gap(12),
-            if (value != null)
-              Text(
-                value!,
-                style: const TextStyle(fontSize: 45),
-              ),
-            HeaderLabel(title),
-            const Gap(6),
-            if (subtitle != null)
-              Text(
-                subtitle!,
-                style: const TextStyle(
-                  color: Colors.black38,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-          ],
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Material(
+        color: color,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: InkWell(
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 32,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (emoji != null)
+                  Text(
+                    emoji!,
+                    style: const TextStyle(fontSize: 45),
+                  ),
+                if (emoji != null) const Gap(12),
+                if (value != null)
+                  Text(
+                    value!,
+                    style: const TextStyle(fontSize: 45),
+                  ),
+                HeaderLabel(title),
+                const Gap(6),
+                if (subtitle != null)
+                  Text(
+                    subtitle!,
+                    style: const TextStyle(
+                      color: Colors.black38,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+              ],
+            ),
+          ),
         ),
       ),
     );
