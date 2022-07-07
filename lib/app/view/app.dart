@@ -24,14 +24,14 @@ class App extends StatelessWidget {
           colors: const FlexSchemeColor(
             primary: Color(0xffffc4ff),
             primaryContainer: Color(0xffd0e4ff),
-            secondary: Color(0xffac3306),
-            secondaryContainer: Color(0xffffdbcf),
-            tertiary: Color(0xff006875),
+            secondary: Color(0xffc4e7ff),
+            secondaryContainer: Color(0xffc4e7ff),
+            tertiary: Color(0xfffef5dd),
             tertiaryContainer: Color(0xff95f0ff),
-            appBarColor: Color(0xffffdbcf),
+            appBarColor: Color(0xffc4e7ff),
             error: Color(0xffb00020),
           ),
-          usedColors: 1,
+          usedColors: 5,
           appBarOpacity: 0.95,
           subThemesData: const FlexSubThemesData(
             blendOnColors: false,
@@ -49,13 +49,6 @@ class App extends StatelessWidget {
           useMaterial3ErrorColors: true,
           visualDensity: FlexColorScheme.comfortablePlatformDensity,
           useMaterial3: true,
-          fontFamily: 'OpenSans',
-          textTheme: const TextTheme(
-            bodyText2: TextStyle(
-              package: 'app_ui',
-              fontFamily: 'OpenSans',
-            ),
-          ),
         ),
         themeMode: ThemeMode.light,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
