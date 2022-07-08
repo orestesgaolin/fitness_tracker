@@ -56,7 +56,8 @@ class _WeightSelectionLayoutState extends State<WeightSelectionLayout> {
                       initialValue: widget.initialWeight.floor(),
                       onChanged: (value) {
                         final fractionalPart = currentValue.fractionalValue();
-                        widget.onChanged(value + fractionalPart / 10);
+                        currentValue = value + fractionalPart / 10;
+                        widget.onChanged(currentValue);
                       },
                     ),
                   ),
@@ -76,7 +77,8 @@ class _WeightSelectionLayoutState extends State<WeightSelectionLayout> {
                       endNumber: 9,
                       initialValue: fractionalPart,
                       onChanged: (value) {
-                        widget.onChanged(currentValue.floor() + value / 10);
+                        currentValue = currentValue.floor() + value / 10;
+                        widget.onChanged(currentValue);
                       },
                     ),
                   ),

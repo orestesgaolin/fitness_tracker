@@ -2,10 +2,12 @@ import 'package:app_ui/app_ui.dart';
 import 'package:fitness/dashboard/dashboard.dart';
 import 'package:fitness/home/home.dart';
 import 'package:fitness/l10n/l10n.dart';
+import 'package:fitness/weight_tracking/cubit/weight_tracking_cubit.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:measurements_repository/measurements_repository.dart';
 
 class DashboardView extends StatelessWidget {
   const DashboardView({super.key});
@@ -65,19 +67,27 @@ class DashboardView extends StatelessWidget {
                   ),
                   DashboardCard(
                     title: l10n.weight,
-                    // (state.weightChange >= 0
-                    //     ? ' +${state.weightChange}'
-                    //     : ' ${state.weightChange}'),
                     value: state.weight.toStringAsFixed(1),
                     valueUnit: 'kg',
                     color: AppColors.yellowBackground,
                     onTap: () {
                       AppBottomSheet.present<void>(
                         context,
-                        child: WeightSelectionLayout(
-                          initialWeight: state.weight,
-                          onSubmitted: (value) {},
-                          onChanged: (value) {},
+                        child: BlocProvider(
+                          create: (context) => WeightTrackingCubit(
+                            context.read<MeasurementsRepository>(),
+                          ),
+                          child: Builder(builder: (context) {
+                            return WeightSelectionLayout(
+                              initialWeight: state.weight,
+                              onSubmitted: (value) {
+                                context
+                                    .read<WeightTrackingCubit>()
+                                    .addWeight(value);
+                              },
+                              onChanged: (value) {},
+                            );
+                          }),
                         ),
                       );
                     },
