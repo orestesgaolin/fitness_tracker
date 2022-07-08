@@ -64,16 +64,10 @@ class DashboardView extends StatelessWidget {
                     color: AppColors.blueBackground,
                   ),
                   DashboardCard(
-                    title: l10n.workout,
-                    subtitle: l10n.addSession,
-                    emoji: '🏋️‍♂️',
-                    color: AppColors.pinkBackground,
-                  ),
-                  DashboardCard(
-                    title: l10n.weight,
-                    subtitle: state.weightChange >= 0
-                        ? '+${state.weightChange}'
-                        : '${state.weightChange}',
+                    title: l10n.weight +
+                        (state.weightChange >= 0
+                            ? ' +${state.weightChange}'
+                            : ' ${state.weightChange}'),
                     value: state.weight.toStringAsFixed(1),
                     color: AppColors.yellowBackground,
                     onTap: () {
@@ -88,6 +82,12 @@ class DashboardView extends StatelessWidget {
                         ),
                       );
                     },
+                  ),
+                  DashboardCard(
+                    title: l10n.workout,
+                    subtitle: l10n.addSession,
+                    emoji: '🏋️‍♂️',
+                    color: AppColors.pinkBackground,
                   ),
                 ],
               ),
