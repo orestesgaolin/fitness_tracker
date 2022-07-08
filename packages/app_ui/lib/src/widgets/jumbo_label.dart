@@ -11,7 +11,7 @@ class JumboLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       content,
-      style: TextStyle(
+      style: const TextStyle(
         fontSize: 32,
         fontWeight: FontWeight.w500,
       ),

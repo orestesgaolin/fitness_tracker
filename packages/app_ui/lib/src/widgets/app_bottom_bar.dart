@@ -8,10 +8,10 @@ import 'package:flutter/material.dart';
 class AppBottomBar extends StatelessWidget {
   /// {@macro app_bottom_bar}
   const AppBottomBar({
-    Key? key,
+    super.key,
     required this.children,
     required this.selectedIndex,
-  }) : super(key: key);
+  });
 
   /// List of icons shown in the bar
   final List<Widget> children;

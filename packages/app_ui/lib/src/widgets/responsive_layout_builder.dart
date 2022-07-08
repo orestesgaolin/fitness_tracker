@@ -11,13 +11,13 @@ typedef ResponsiveLayoutWidgetBuilder = Widget Function(BuildContext, Widget?);
 class ResponsiveLayoutBuilder extends StatelessWidget {
   /// {@macro responsive_layout_builder}
   const ResponsiveLayoutBuilder({
-    Key? key,
+    super.key,
     required this.small,
     required this.large,
     this.medium,
     this.xLarge,
     this.child,
-  }) : super(key: key);
+  });
 
   /// [ResponsiveLayoutWidgetBuilder] for small layout.
   final ResponsiveLayoutWidgetBuilder small;
@@ -42,14 +42,11 @@ class ResponsiveLayoutBuilder extends StatelessWidget {
       builder: (context, constraints) {
         if (constraints.maxWidth <= AppBreakpoints.small) {
           return small(context, child);
-        }
-        else if (constraints.maxWidth <= AppBreakpoints.medium) {
+        } else if (constraints.maxWidth <= AppBreakpoints.medium) {
           return (medium ?? large).call(context, child);
-        }
-        else if (constraints.maxWidth <= AppBreakpoints.large) {
+        } else if (constraints.maxWidth <= AppBreakpoints.large) {
           return large(context, child);
-        }
-        else {
+        } else {
           return (xLarge ?? large).call(context, child);
         }
       },

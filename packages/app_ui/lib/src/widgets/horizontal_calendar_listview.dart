@@ -2,11 +2,22 @@
 
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:infinite_listview/infinite_listview.dart';
 import 'package:intl/intl.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 const _initialOffset = 24.0;
 
+/// This widget displays a horizontal infinite calendar
+///
+/// When scrolled left or right a [ResetCalendarToNowButton] is shown on the
+/// far right. When tapped it resets the scroll position to [_initialOffset].
+///
+/// Moreover, a current [MonthName] is displayed on the far right, before the
+/// [ResetCalendarToNowButton].
+///
+/// The [selectedDate] is highlighted.
 class HorizontalCalendarListView extends StatefulWidget {
   const HorizontalCalendarListView({
     super.key,
@@ -29,12 +40,13 @@ class _HorizontalCalendarListViewState
   final InfiniteScrollController scrollController =
       InfiniteScrollController(initialScrollOffset: _initialOffset);
 
-  void resetToNow() {
-    scrollController.animateTo(
-      _initialOffset,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.decelerate,
-    );
+  /// The date informing the view what month name should be displayed
+  late DateTime monthDate;
+
+  @override
+  void initState() {
+    super.initState();
+    monthDate = widget.selectedDate;
   }
 
   @override
@@ -45,64 +57,155 @@ class _HorizontalCalendarListViewState
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        AnimatedSwitcher(
-          duration: const Duration(milliseconds: 500),
-          switchInCurve: Curves.decelerate,
-          switchOutCurve: Curves.decelerate,
-          transitionBuilder: (Widget child, Animation<double> animation) {
-            return SlideTransition(
-              position: Tween<Offset>(
-                begin: const Offset(-2, 0),
-                end: Offset.zero,
-              ).animate(animation),
-              child: FadeTransition(
-                opacity: animation,
-                child: child,
-              ),
-            );
-          },
-          child: const Text(
-            'June',
-            key: ValueKey('2'),
-            style: TextStyle(fontSize: 32),
-          ),
-        ),
-        InfiniteListView.builder(
-          controller: scrollController,
-          scrollDirection: Axis.horizontal,
-          itemBuilder: (context, index) {
-            final date = widget.startDate.add(Duration(days: index - 1));
-            return ScrollCalendarTile(
-              title: '${date.day}',
-              subtitle: DateFormat.E().format(date),
-              selected: date.isAtSameMomentAs(widget.selectedDate),
-              onTap: () => widget.onTap(date),
-            );
-          },
-        ),
-        Positioned(
-          right: 0,
-          top: 0,
-          bottom: 0,
-          child: AnimatedBuilder(
-            animation: scrollController,
-            builder: (context, child) {
-              return AnimatedOpacity(
-                opacity: scrollController.offset != _initialOffset ? 1.0 : 0.0,
-                duration: const Duration(milliseconds: 200),
-                child: child,
+    return NotificationListener<CalendarInViewNotification>(
+      onNotification: (notification) {
+        if (notification.date.month != monthDate.month) {
+          monthDate = notification.date;
+          SchedulerBinding.instance.scheduleFrameCallback((_) {
+            setState(() {});
+          });
+        }
+
+        return true;
+      },
+      child: Stack(
+        children: [
+          InfiniteListView.builder(
+            controller: scrollController,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) {
+              final date = widget.startDate.add(Duration(days: index - 1));
+              return VisibilityDetector(
+                key: ValueKey(date),
+                onVisibilityChanged: (info) {
+                  if (info.visibleFraction == 1) {
+                    CalendarInViewNotification(date).dispatch(context);
+                  }
+                },
+                child: ScrollCalendarTile(
+                  title: '${date.day}',
+                  subtitle: DateFormat.E().format(date),
+                  selected: date.isAtSameMomentAs(widget.selectedDate),
+                  onTap: () => widget.onTap(date),
+                ),
               );
             },
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(shape: const CircleBorder()),
-              onPressed: resetToNow,
-              child: const Icon(Icons.restore),
+          ),
+          const Positioned(
+            top: 0,
+            bottom: 0,
+            right: 0,
+            child: _WhiteGradient(),
+          ),
+          Positioned(
+            top: 0,
+            bottom: 0,
+            right: 0,
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+              switchInCurve: Curves.decelerate,
+              switchOutCurve: Curves.decelerate,
+              transitionBuilder: (Widget child, Animation<double> animation) {
+                return FadeTransition(
+                  opacity: animation,
+                  child: child,
+                );
+              },
+              child: SizedBox(
+                width: 120,
+                key: ValueKey(monthDate.month),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    MonthName(monthDate: monthDate),
+                    ResetCalendarToNowButton(
+                      scrollController: scrollController,
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class MonthName extends StatelessWidget {
+  const MonthName({
+    super.key,
+    required this.monthDate,
+  });
+
+  final DateTime monthDate;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      DateFormat('MMM').format(monthDate),
+      style: const TextStyle(
+        fontSize: 32,
+        color: Colors.black12,
+      ),
+      textAlign: TextAlign.right,
+    );
+  }
+}
+
+class ResetCalendarToNowButton extends StatelessWidget {
+  const ResetCalendarToNowButton({
+    super.key,
+    required this.scrollController,
+  });
+
+  final InfiniteScrollController scrollController;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 32,
+      child: AnimatedBuilder(
+        animation: scrollController,
+        builder: (context, child) {
+          return AnimatedOpacity(
+            opacity: scrollController.offset != _initialOffset ? 1.0 : 0.0,
+            duration: const Duration(milliseconds: 200),
+            child: child,
+          );
+        },
+        child: InkWell(
+          onTap: () {
+            scrollController.animateTo(
+              _initialOffset,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.decelerate,
+            );
+          },
+          child: const Icon(
+            Icons.restore,
+            color: Colors.black12,
+          ),
         ),
-      ],
+      ),
+    );
+  }
+}
+
+class _WhiteGradient extends StatelessWidget {
+  const _WhiteGradient();
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Colors.white.withAlpha(0), Colors.white],
+          stops: const [0.0, 0.5],
+        ),
+      ),
+      child: const SizedBox(width: 150),
     );
   }
 }
@@ -173,4 +276,10 @@ class ScrollCalendarTile extends StatelessWidget {
       ),
     );
   }
+}
+
+class CalendarInViewNotification extends Notification {
+  CalendarInViewNotification(this.date);
+
+  final DateTime date;
 }

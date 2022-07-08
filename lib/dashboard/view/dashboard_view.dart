@@ -76,9 +76,7 @@ class DashboardView extends StatelessWidget {
                         child: WeightSelectionLayout(
                           initialWeight: state.weight,
                           onSubmitted: (value) {},
-                          onChanged: (value) {
-                            //TODO(dominik): handle selected value
-                          },
+                          onChanged: (value) {},
                         ),
                       );
                     },

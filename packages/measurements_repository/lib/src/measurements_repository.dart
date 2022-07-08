@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs
 
-import 'package:collection/collection.dart';
 import 'package:database_client/database_client.dart';
 import 'package:equatable/equatable.dart';
 
@@ -26,6 +25,9 @@ class MeasurementsRepository {
   Stream<WeightProgress> latestWeight() {
     return databaseClient.weightEntries(limit: 2, descending: true).map(
       (e) {
+        if (e.isEmpty) {
+          return const WeightProgress(0, 0);
+        }
         final previousValue = e.length == 2 ? e[1] : e[0];
         return WeightProgress(e.first.value, previousValue.value);
       },
