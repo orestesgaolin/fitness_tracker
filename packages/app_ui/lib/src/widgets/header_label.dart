@@ -12,7 +12,7 @@ class HeaderLabel extends StatelessWidget {
     return Text(
       content,
       style: const TextStyle(
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.w600,
         fontSize: 16,
       ),
     );

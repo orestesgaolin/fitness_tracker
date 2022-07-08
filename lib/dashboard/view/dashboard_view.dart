@@ -64,11 +64,12 @@ class DashboardView extends StatelessWidget {
                     color: AppColors.blueBackground,
                   ),
                   DashboardCard(
-                    title: l10n.weight +
-                        (state.weightChange >= 0
-                            ? ' +${state.weightChange}'
-                            : ' ${state.weightChange}'),
+                    title: l10n.weight,
+                    // (state.weightChange >= 0
+                    //     ? ' +${state.weightChange}'
+                    //     : ' ${state.weightChange}'),
                     value: state.weight.toStringAsFixed(1),
+                    valueUnit: 'kg',
                     color: AppColors.yellowBackground,
                     onTap: () {
                       AppBottomSheet.present<void>(

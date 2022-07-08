@@ -24,6 +24,53 @@ dev_dependencies:
 
 flutter:
   fonts:
+    - family: BarlowCondensed
+      fonts:
+        - asset: assets/fonts/BarlowCondensed-Black.ttf
+          weight: 900
+        - asset: assets/fonts/BarlowCondensed-BlackItalic.ttf
+          weight: 900
+          style: italic
+        - asset: assets/fonts/BarlowCondensed-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/BarlowCondensed-ExtraBoldItalic.ttf
+          weight: 800
+          style: italic
+        - asset: assets/fonts/BarlowCondensed-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/BarlowCondensed-BoldItalic.ttf
+          weight: 700
+          style: italic
+        - asset: assets/fonts/BarlowCondensed-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/BarlowCondensed-SemiBoldItalic.ttf
+          weight: 600
+          style: italic
+        - asset: assets/fonts/BarlowCondensed-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/BarlowCondensed-MediumItalic.ttf
+          weight: 500
+          style: italic
+        - asset: assets/fonts/BarlowCondensed-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/BarlowCondensed-Italic.ttf
+          weight: 400
+          style: italic
+        - asset: assets/fonts/BarlowCondensed-Light.ttf
+          weight: 300
+        - asset: assets/fonts/BarlowCondensed-LightItalic.ttf
+          weight: 300
+          style: italic
+        - asset: assets/fonts/BarlowCondensed-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/BarlowCondensed-ExtraLightItalic.ttf
+          weight: 200
+          style: italic
+        - asset: assets/fonts/BarlowCondensed-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/BarlowCondensed-ThinItalic.ttf
+          weight: 100
+          style: italic
     - family: OpenSans
       fonts:
         - asset: assets/fonts/OpenSans-ExtraBold.ttf

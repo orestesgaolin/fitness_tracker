@@ -18,12 +18,14 @@ class DashboardCard extends StatelessWidget {
     this.value,
     required this.color,
     this.onTap,
+    this.valueUnit,
   });
 
   final String title;
   final String? subtitle;
   final String? emoji;
   final String? value;
+  final String? valueUnit;
   final Color color;
   final VoidCallback? onTap;
 
@@ -48,10 +50,17 @@ class DashboardCard extends StatelessWidget {
                 ),
               if (emoji != null) const Gap(12),
               if (value != null)
-                AutoSizeText(
-                  value!,
-                  style: const TextStyle(fontSize: 45),
-                  maxLines: 1,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.alphabetic,
+                  children: [
+                    AutoSizeText(
+                      value!,
+                      style: const TextStyle(fontSize: 45),
+                      maxLines: 1,
+                    ),
+                    if (valueUnit != null) Text(valueUnit!)
+                  ],
                 ),
               HeaderLabel(title),
               const Gap(6),
@@ -60,7 +69,7 @@ class DashboardCard extends StatelessWidget {
                   subtitle!,
                   style: const TextStyle(
                     color: Colors.black38,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
             ],
