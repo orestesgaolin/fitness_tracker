@@ -21,7 +21,7 @@ class DashboardView extends StatelessWidget {
         const SizedBox(height: 100),
         JumboLabel(l10n.motivationalLabel).paddedH(28),
         SizedBox(
-          height: 60 * textScale,
+          height: 70 * textScale,
           child: HorizontalCalendarListView(
             startDate: state.startDate,
             selectedDate: state.selectedDate,

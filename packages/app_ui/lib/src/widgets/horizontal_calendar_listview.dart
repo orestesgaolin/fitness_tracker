@@ -147,7 +147,7 @@ class MonthName extends StatelessWidget {
       DateFormat('MMM').format(monthDate),
       style: const TextStyle(
         fontSize: 32,
-        color: Colors.black12,
+        color: Colors.black38,
       ),
       textAlign: TextAlign.right,
     );
@@ -198,14 +198,19 @@ class _WhiteGradient extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Colors.white.withAlpha(0), Colors.white],
-          stops: const [0.0, 0.5],
+    return IgnorePointer(
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Colors.white.withAlpha(0),
+              Colors.white,
+            ],
+            stops: const [0.0, 1.0],
+          ),
         ),
+        child: const SizedBox(width: 130),
       ),
-      child: const SizedBox(width: 150),
     );
   }
 }
@@ -265,7 +270,7 @@ class ScrollCalendarTile extends StatelessWidget {
                     subtitle,
                     style: TextStyle(
                       color: subtitleColor,
-                      fontSize: 8,
+                      fontSize: 12,
                     ),
                   ),
                 ],
