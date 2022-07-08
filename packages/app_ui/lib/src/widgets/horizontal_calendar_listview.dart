@@ -17,7 +17,7 @@ class HorizontalCalendarListView extends StatefulWidget {
 
   final DateTime startDate;
   final DateTime selectedDate;
-  final Function(DateTime) onTap;
+  final void Function(DateTime) onTap;
 
   @override
   State<HorizontalCalendarListView> createState() =>
@@ -47,6 +47,28 @@ class _HorizontalCalendarListViewState
   Widget build(BuildContext context) {
     return Stack(
       children: [
+        AnimatedSwitcher(
+          duration: const Duration(milliseconds: 500),
+          switchInCurve: Curves.decelerate,
+          switchOutCurve: Curves.decelerate,
+          transitionBuilder: (Widget child, Animation<double> animation) {
+            return SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(-2, 0),
+                end: Offset.zero,
+              ).animate(animation),
+              child: FadeTransition(
+                opacity: animation,
+                child: child,
+              ),
+            );
+          },
+          child: const Text(
+            'June',
+            key: ValueKey('2'),
+            style: TextStyle(fontSize: 32),
+          ),
+        ),
         InfiniteListView.builder(
           controller: scrollController,
           scrollDirection: Axis.horizontal,
