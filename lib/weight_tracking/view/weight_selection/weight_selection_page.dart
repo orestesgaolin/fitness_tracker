@@ -21,9 +21,11 @@ class WeightSelectionPage extends StatelessWidget {
         builder: (context) {
           return WeightSelectionLayout(
             initialWeight: initialWeight,
-            onChanged: (value) {},
-            onSubmitted: (value) {
-              context.read<WeightTrackingCubit>().addWeight(value);
+            onChanged: (value, dateTime) {},
+            onSubmitted: (value, dateTime) {
+              context
+                  .read<WeightTrackingCubit>()
+                  .addWeight(value, timestamp: dateTime);
             },
           );
         },

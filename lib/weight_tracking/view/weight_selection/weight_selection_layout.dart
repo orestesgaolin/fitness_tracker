@@ -2,6 +2,8 @@ import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+typedef OnWeightSelected = void Function(double, DateTime);
+
 class WeightSelectionLayout extends StatefulWidget {
   const WeightSelectionLayout({
     super.key,
@@ -11,8 +13,8 @@ class WeightSelectionLayout extends StatefulWidget {
   });
 
   final double initialWeight;
-  final void Function(double) onChanged;
-  final void Function(double) onSubmitted;
+  final OnWeightSelected onChanged;
+  final OnWeightSelected onSubmitted;
 
   @override
   State<WeightSelectionLayout> createState() => _WeightSelectionLayoutState();
@@ -20,6 +22,7 @@ class WeightSelectionLayout extends StatefulWidget {
 
 class _WeightSelectionLayoutState extends State<WeightSelectionLayout> {
   late double currentValue;
+  DateTime dateTime = DateTime.now();
 
   @override
   void initState() {
@@ -36,7 +39,30 @@ class _WeightSelectionLayoutState extends State<WeightSelectionLayout> {
         const SizedBox(
           height: 10,
         ),
-        HeaderLabel(DateFormat.MMMEd().format(DateTime.now())),
+        CardDecoration(
+          color: AppColors.lightGrey,
+          child: InkWell(
+            onTap: () async {
+              final selected = await showDatePicker(
+                context: context,
+                initialDate: dateTime,
+                firstDate: DateTime(2000),
+                lastDate: DateTime.now().add(const Duration(days: 1000)),
+              );
+              if (selected != null) {
+                setState(() {
+                  dateTime = selected;
+                });
+              }
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              child: HeaderLabel(
+                DateFormat.MMMEd().format(dateTime),
+              ),
+            ),
+          ),
+        ),
         const SizedBox(
           height: 10,
         ),
@@ -56,7 +82,7 @@ class _WeightSelectionLayoutState extends State<WeightSelectionLayout> {
                       onChanged: (value) {
                         final fractionalPart = currentValue.fractionalValue();
                         currentValue = value + fractionalPart / 10;
-                        widget.onChanged(currentValue);
+                        widget.onChanged(currentValue, dateTime);
                       },
                     ),
                   ),
@@ -77,7 +103,7 @@ class _WeightSelectionLayoutState extends State<WeightSelectionLayout> {
                       initialValue: fractionalPart,
                       onChanged: (value) {
                         currentValue = currentValue.floor() + value / 10;
-                        widget.onChanged(currentValue);
+                        widget.onChanged(currentValue, dateTime);
                       },
                     ),
                   ),
@@ -93,8 +119,7 @@ class _WeightSelectionLayoutState extends State<WeightSelectionLayout> {
               Expanded(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: Theme.of(context).colorScheme.errorContainer,
-                    elevation: 0,
+                    primary: Theme.of(context).colorScheme.tertiary,
                   ),
                   onPressed: () {
                     Navigator.maybePop(context);
@@ -107,12 +132,8 @@ class _WeightSelectionLayoutState extends State<WeightSelectionLayout> {
               const Gap(8),
               Expanded(
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Theme.of(context).colorScheme.secondary,
-                    elevation: 0,
-                  ),
                   onPressed: () {
-                    widget.onSubmitted(currentValue);
+                    widget.onSubmitted(currentValue, dateTime);
                     Navigator.maybePop(context);
                   },
                   child: Text(
