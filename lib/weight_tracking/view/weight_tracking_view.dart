@@ -13,16 +13,6 @@ class WeightTrackingView extends StatelessWidget {
     return SafeArea(
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: TextField(
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(hintText: 'Weight today'),
-              onSubmitted: (value) {
-                cubit.addWeight(double.tryParse(value));
-              },
-            ),
-          ),
           Expanded(
             child: ListView.builder(
               itemCount: cubit.state.weights.length,

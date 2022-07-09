@@ -2,12 +2,10 @@ import 'package:app_ui/app_ui.dart';
 import 'package:fitness/dashboard/dashboard.dart';
 import 'package:fitness/home/home.dart';
 import 'package:fitness/l10n/l10n.dart';
-import 'package:fitness/weight_tracking/cubit/weight_tracking_cubit.dart';
+import 'package:fitness/weight_tracking/weight_tracking.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:measurements_repository/measurements_repository.dart';
 
 class DashboardView extends StatelessWidget {
   const DashboardView({super.key});
@@ -18,9 +16,9 @@ class DashboardView extends StatelessWidget {
     final textScale = MediaQuery.of(context).textScaleFactor;
     final l10n = context.l10n;
     return ListView(
-      padding: const EdgeInsets.only(bottom: 140),
+      padding: const EdgeInsets.only(bottom: 200),
       children: [
-        const SizedBox(height: 100),
+        const Gap(100),
         JumboLabel(l10n.motivationalLabel).paddedH(28),
         SizedBox(
           height: 70 * textScale,
@@ -73,21 +71,8 @@ class DashboardView extends StatelessWidget {
                     onTap: () {
                       AppBottomSheet.present<void>(
                         context,
-                        child: BlocProvider(
-                          create: (context) => WeightTrackingCubit(
-                            context.read<MeasurementsRepository>(),
-                          ),
-                          child: Builder(builder: (context) {
-                            return WeightSelectionLayout(
-                              initialWeight: state.weight,
-                              onSubmitted: (value) {
-                                context
-                                    .read<WeightTrackingCubit>()
-                                    .addWeight(value);
-                              },
-                              onChanged: (value) {},
-                            );
-                          }),
+                        child: WeightSelectionPage(
+                          initialWeight: state.weight,
                         ),
                       );
                     },
