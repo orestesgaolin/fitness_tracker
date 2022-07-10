@@ -16,5 +16,9 @@
         }
     },
     "allStats": "All Stats",
-    "allStatsSubtitle": "See progress"
+    "allStatsSubtitle": "See progress",
+    "allTime": "All time",
+    "lastYear": "Last year",
+    "last30Days": "Last 30 days",
+    "bodyWeight": "Body weight"
 }
