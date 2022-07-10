@@ -1,11 +1,11 @@
 # Fitness Tracker
 
 <p align="center">
-<img src="https://github.com/orestesgaolin/fitness_tracker/blob/main/icon/ios.png?raw=true" height="100" alt="App logo" />
+<img src="https://github.com/orestesgaolin/fitness_tracker/blob/main/icon/ios.png?raw=true" height="140" style="border-radius:20px;" alt="App logo" />
 </p>
 
 <p align="center">
-<img src="https://github.com/orestesgaolin/fitness_tracker/blob/main/docs/recording.gif?raw=true" alt="App recording" />
+<img src="https://github.com/orestesgaolin/fitness_tracker/blob/main/docs/recording.gif?raw=true" style="border-radius:20px;" alt="App recording" />
 </p>
 
 App keeping track of health and exercises.
