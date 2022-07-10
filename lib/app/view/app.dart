@@ -35,6 +35,7 @@ class App extends StatelessWidget {
           surfaceMode: FlexSurfaceMode.highScaffoldLowSurface,
           blendLevel: 20,
           appBarOpacity: 0.95,
+          useMaterial3: true,
           subThemesData: const FlexSubThemesData(
             blendOnLevel: 20,
             blendOnColors: false,
@@ -46,6 +47,7 @@ class App extends StatelessWidget {
             timePickerDialogRadius: 16,
             elevatedButtonElevation: 0,
             dialogElevation: 0,
+            toggleButtonsRadius: 8,
           ),
           visualDensity: FlexColorScheme.comfortablePlatformDensity,
           textTheme: TextTheme(
@@ -89,6 +91,7 @@ class App extends StatelessWidget {
             timePickerDialogRadius: 16,
             elevatedButtonElevation: 0,
             dialogElevation: 0,
+            toggleButtonsRadius: 8,
           ),
           visualDensity: FlexColorScheme.comfortablePlatformDensity,
           textTheme: TextTheme(
@@ -107,7 +110,6 @@ class App extends StatelessWidget {
           ),
           fontFamily: 'BarlowCondensed',
         ),
-        themeMode: ThemeMode.system,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         home: const HomePage(),

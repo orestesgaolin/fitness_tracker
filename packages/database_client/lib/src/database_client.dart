@@ -19,12 +19,23 @@ class DatabaseClient extends _$DatabaseClient {
   int get schemaVersion => 1;
 
   Stream<List<WeightEntry>> weightEntries({
+    DateTime? startDate,
+    DateTime? endDate,
     int limit = 0,
     bool descending = false,
   }) {
     final mode = descending ? OrderingMode.desc : OrderingMode.asc;
-    final query = select(weightEntryModel)
-      ..orderBy([(t) => OrderingTerm(expression: t.timestamp, mode: mode)]);
+    final query = select(weightEntryModel);
+
+    if (startDate != null && endDate != null) {
+      query.where((t) => t.timestamp.isBetweenValues(startDate, endDate));
+    } else if (startDate != null) {
+      query.where((t) => t.timestamp.isBiggerOrEqualValue(startDate));
+    } else if (endDate != null) {
+      query.where((t) => t.timestamp.isSmallerOrEqualValue(startDate));
+    }
+
+    query.orderBy([(t) => OrderingTerm(expression: t.timestamp, mode: mode)]);
     if (limit != 0) {
       query.limit(limit);
     }
@@ -38,6 +49,10 @@ class DatabaseClient extends _$DatabaseClient {
         timestamp: Value(timestamp),
       ),
     );
+  }
+
+  Future<int> deleteWeight({required int id}) {
+    return (delete(weightEntryModel)..where((tbl) => tbl.id.equals(id))).go();
   }
 }
 

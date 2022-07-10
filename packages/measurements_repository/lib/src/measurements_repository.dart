@@ -16,9 +16,9 @@ class MeasurementsRepository {
     await databaseClient.saveWeight(weight.value, weight.timestamp);
   }
 
-  Stream<List<Weight>> weights() {
+  Stream<List<Weight>> weights({DateTime? startDate, DateTime? endDate}) {
     return databaseClient
-        .weightEntries()
+        .weightEntries(startDate: startDate, endDate: endDate)
         .map((e) => e.map(Weight.fromDatabase).toList());
   }
 
@@ -33,22 +33,32 @@ class MeasurementsRepository {
       },
     );
   }
+
+  void deleteWeight({required int id}) {
+    databaseClient.deleteWeight(id: id);
+  }
 }
 
 class Weight extends Equatable {
-  const Weight(this.value, this.timestamp);
+  const Weight(
+    this.value,
+    this.timestamp, {
+    this.id,
+  });
 
   Weight.fromDatabase(WeightEntry weightEntry)
       : this(
           weightEntry.value,
           weightEntry.timestamp,
+          id: weightEntry.id,
         );
 
   final double value;
   final DateTime timestamp;
+  final int? id;
 
   @override
-  List<Object?> get props => [value, timestamp];
+  List<Object?> get props => [value, timestamp, id];
 }
 
 class WeightProgress extends Equatable {

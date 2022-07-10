@@ -13,9 +13,7 @@ class WeightTrackingPage extends StatelessWidget {
       create: (context) => WeightTrackingCubit(
         context.read<MeasurementsRepository>(),
       )..init(),
-      child: const Scaffold(
-        body: WeightTrackingView(),
-      ),
+      child: const WeightTrackingView(),
     );
   }
 }

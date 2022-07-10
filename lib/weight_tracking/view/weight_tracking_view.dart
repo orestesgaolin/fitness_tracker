@@ -1,3 +1,5 @@
+import 'package:app_ui/app_ui.dart';
+import 'package:fitness/l10n/l10n.dart';
 import 'package:fitness/weight_tracking/weight_tracking.dart';
 import 'package:flutter/material.dart';
 
@@ -10,24 +12,51 @@ class WeightTrackingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.watch<WeightTrackingCubit>();
+    final weights = cubit.state.weights;
+    final l10n = context.l10n;
     return SafeArea(
-      child: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: cubit.state.weights.length,
-              itemBuilder: (context, index) {
-                final weight = cubit.state.weights[index];
-                return ListTile(
-                  title: Text('Weight: ${weight.value}'),
-                  subtitle: Text(
-                    DateFormat('E, M/d, HH:mm').format(weight.timestamp),
-                  ),
-                );
-              },
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          children: [
+            JumboLabel(l10n.bodyWeight),
+            CardDecoration(
+              color: AppColors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 240,
+                      child: WeightChart(weights: weights),
+                    ),
+                    const TimeRangeSelector(),
+                  ],
+                ),
+              ),
             ),
-          ),
-        ],
+            Expanded(
+              child: ListView.builder(
+                itemCount: cubit.state.weights.length,
+                itemBuilder: (context, index) {
+                  final weight = cubit.state.weights[index];
+                  return ListTile(
+                    title: Text('${weight.value} kg'),
+                    subtitle: Text(
+                      DateFormat('E, M/d').format(weight.timestamp),
+                    ),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.delete_outline),
+                      onPressed: () {
+                        cubit.deleteEntry(weight.id!);
+                      },
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
