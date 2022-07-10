@@ -25,6 +25,7 @@ dependencies:
     path: packages/measurements_repository
   path: ^1.8.1
   path_provider: ^2.0.11
+  syncfusion_flutter_charts: ^20.2.36
 
 dev_dependencies:
   bloc_test: ^9.0.3
