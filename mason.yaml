@@ -9,3 +9,7 @@ bricks:
     git:
       url: "https://github.com/orestesgaolin/mason_bricks"
       path: repository
+  workflow:
+    git:
+      url: "https://github.com/orestesgaolin/mason_bricks"
+      path: workflow
