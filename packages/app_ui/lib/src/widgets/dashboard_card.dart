@@ -66,8 +66,11 @@ class DashboardCard extends StatelessWidget {
               if (subtitle != null)
                 Text(
                   subtitle!,
-                  style: const TextStyle(
-                    color: Colors.black38,
+                  style: TextStyle(
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onSurface
+                        .withOpacity(0.3),
                     fontWeight: FontWeight.w500,
                   ),
                 ),

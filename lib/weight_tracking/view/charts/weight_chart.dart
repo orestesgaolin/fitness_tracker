@@ -13,7 +13,11 @@ class WeightChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final labelStyle = Theme.of(context).textTheme.caption?.copyWith(
+          color: Theme.of(context).colorScheme.onBackground.withOpacity(0.38),
+        );
     return SfCartesianChart(
+      key: UniqueKey(),
       legend: Legend(isVisible: false),
       plotAreaBorderWidth: 0,
       primaryYAxis: NumericAxis(
@@ -31,10 +35,7 @@ class WeightChart extends StatelessWidget {
           ],
         ),
         majorTickLines: const MajorTickLines(size: 0),
-        labelStyle: Theme.of(context)
-            .textTheme
-            .caption
-            ?.copyWith(color: Colors.black38),
+        labelStyle: labelStyle,
         borderWidth: 0,
       ),
       primaryXAxis: DateTimeAxis(
@@ -45,16 +46,13 @@ class WeightChart extends StatelessWidget {
         minorGridLines: const MinorGridLines(width: 0),
         majorGridLines: const MajorGridLines(width: 0),
         majorTickLines: const MajorTickLines(size: 0),
-        labelStyle: Theme.of(context)
-            .textTheme
-            .caption
-            ?.copyWith(color: Colors.black38),
+        labelStyle: labelStyle,
         rangePadding: ChartRangePadding.round,
         interval: 2,
         borderWidth: 0,
       ),
       series: [
-        SplineSeries<Weight, DateTime>(
+        SplineAreaSeries<Weight, DateTime>(
           dataSource: weights,
           xValueMapper: (Weight weight, _) => weight.timestamp,
           yValueMapper: (Weight weight, _) => weight.value,
@@ -68,6 +66,16 @@ class WeightChart extends StatelessWidget {
             width: 4,
           ),
           color: Theme.of(context).primaryColor.darken(),
+          borderWidth: 2,
+          borderColor: Theme.of(context).primaryColor.darken(),
+          gradient: LinearGradient(
+            colors: [
+              Theme.of(context).primaryColor,
+              Theme.of(context).primaryColor.withOpacity(0),
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
         ),
       ],
     );

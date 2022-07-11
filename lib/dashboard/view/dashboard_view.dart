@@ -41,16 +41,16 @@ class DashboardView extends StatelessWidget {
                   DashboardCard(
                     title: l10n.allStats,
                     subtitle: l10n.allStatsSubtitle,
-                    color: AppColors.lightGrey,
+                    color: Theme.of(context).colorScheme.tertiaryContainer,
                     onTap: () {
                       context.read<HomeCubit>().setPage(HomeSelection.activity);
                     },
                   ),
                   DashboardCard(
                     title: l10n.steps,
-                    subtitle: l10n.stepsCount(state.steps),
+                    subtitle: l10n.stepsCount(3745),
                     emoji: '🚶‍♂️',
-                    color: AppColors.blueBackground,
+                    color: Theme.of(context).colorScheme.primaryContainer,
                   ),
                 ],
               ),
@@ -61,13 +61,13 @@ class DashboardView extends StatelessWidget {
                 children: [
                   DashboardCard(
                     title: '🗓 ${DateFormat.MEd().format(state.selectedDate)}',
-                    color: AppColors.blueBackground,
+                    color: Theme.of(context).colorScheme.primaryContainer,
                   ),
                   DashboardCard(
                     title: l10n.weight,
                     value: state.weight.toStringAsFixed(1),
                     valueUnit: 'kg',
-                    color: AppColors.yellowBackground,
+                    color: Theme.of(context).colorScheme.tertiaryContainer,
                     onTap: () {
                       AppBottomSheet.present<void>(
                         context,
@@ -81,7 +81,7 @@ class DashboardView extends StatelessWidget {
                     title: l10n.workout,
                     subtitle: l10n.addSession,
                     emoji: '🏋️‍♂️',
-                    color: AppColors.pinkBackground,
+                    color: Theme.of(context).colorScheme.secondaryContainer,
                   ),
                 ],
               ),
@@ -89,22 +89,6 @@ class DashboardView extends StatelessWidget {
           ],
         ).paddedH(24),
       ],
-    );
-  }
-}
-
-extension on Widget {
-  Widget paddedH(double value) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: value),
-      child: this,
-    );
-  }
-
-  Widget paddedV(double value) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: value),
-      child: this,
     );
   }
 }

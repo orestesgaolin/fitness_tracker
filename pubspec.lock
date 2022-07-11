@@ -170,7 +170,7 @@ packages:
     source: hosted
     version: "6.1.2"
   flex_color_scheme:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: flex_color_scheme
       url: "https://pub.dartlang.org"

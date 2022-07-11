@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs
 
-import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:infinite_listview/infinite_listview.dart';
@@ -95,7 +94,7 @@ class _HorizontalCalendarListViewState
             top: 0,
             bottom: 0,
             right: 0,
-            child: _WhiteGradient(),
+            child: _BgGradient(),
           ),
           Positioned(
             top: 0,
@@ -145,9 +144,9 @@ class MonthName extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       DateFormat('MMM').format(monthDate),
-      style: const TextStyle(
+      style: TextStyle(
         fontSize: 32,
-        color: Colors.black38,
+        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.3),
       ),
       textAlign: TextAlign.right,
     );
@@ -183,9 +182,9 @@ class ResetCalendarToNowButton extends StatelessWidget {
               curve: Curves.decelerate,
             );
           },
-          child: const Icon(
+          child: Icon(
             Icons.restore,
-            color: Colors.black12,
+            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.3),
           ),
         ),
       ),
@@ -193,8 +192,8 @@ class ResetCalendarToNowButton extends StatelessWidget {
   }
 }
 
-class _WhiteGradient extends StatelessWidget {
-  const _WhiteGradient();
+class _BgGradient extends StatelessWidget {
+  const _BgGradient();
 
   @override
   Widget build(BuildContext context) {
@@ -203,8 +202,8 @@ class _WhiteGradient extends StatelessWidget {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Colors.white.withAlpha(0),
-              Colors.white,
+              Theme.of(context).colorScheme.background.withAlpha(0),
+              Theme.of(context).colorScheme.background,
             ],
             stops: const [0.0, 1.0],
           ),
@@ -231,10 +230,18 @@ class ScrollCalendarTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = selected ? AppColors.blackBackground : Colors.transparent;
-    final borderColor = selected ? Colors.transparent : Colors.black12;
-    final textColor = selected ? Colors.white : Colors.black26;
-    final subtitleColor = selected ? Colors.white38 : Colors.black26;
+    final color = selected
+        ? Theme.of(context).colorScheme.onBackground
+        : Colors.transparent;
+    final borderColor = selected
+        ? Colors.transparent
+        : Theme.of(context).colorScheme.outline.withOpacity(0.25);
+    final textColor = selected
+        ? Theme.of(context).colorScheme.background
+        : Theme.of(context).colorScheme.outline;
+    final subtitleColor = selected
+        ? Theme.of(context).colorScheme.background
+        : Theme.of(context).colorScheme.outline.withOpacity(0.75);
     final textScale = MediaQuery.of(context).textScaleFactor;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),

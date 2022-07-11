@@ -40,7 +40,7 @@ class _WeightSelectionLayoutState extends State<WeightSelectionLayout> {
           height: 10,
         ),
         CardDecoration(
-          color: AppColors.lightGrey,
+          color: Theme.of(context).colorScheme.surface,
           child: InkWell(
             onTap: () async {
               final selected = await showDatePicker(
@@ -67,7 +67,7 @@ class _WeightSelectionLayoutState extends State<WeightSelectionLayout> {
           height: 10,
         ),
         CardDecoration(
-          color: AppColors.lightGrey,
+          color: Theme.of(context).colorScheme.surface,
           child: SizedBox(
             height: 180,
             child: Padding(

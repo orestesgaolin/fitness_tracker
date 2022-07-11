@@ -21,20 +21,16 @@ class WeightTrackingView extends StatelessWidget {
           children: [
             JumboLabel(l10n.bodyWeight),
             CardDecoration(
-              color: AppColors.white,
+              color: Theme.of(context).colorScheme.primaryContainer,
               child: Padding(
                 padding: const EdgeInsets.all(8),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 240,
-                      child: WeightChart(weights: weights),
-                    ),
-                    const TimeRangeSelector(),
-                  ],
+                child: SizedBox(
+                  height: 240,
+                  child: WeightChart(weights: weights),
                 ),
               ),
             ),
+            const TimeRangeSelector(),
             Expanded(
               child: ListView.builder(
                 itemCount: cubit.state.weights.length,
