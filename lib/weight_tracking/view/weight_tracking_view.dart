@@ -11,8 +11,7 @@ class WeightTrackingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.watch<WeightTrackingCubit>();
-    final weights = cubit.state.weights;
+    final state = context.watch<WeightTrackingCubit>().state;
     final l10n = context.l10n;
     return SafeArea(
       child: Padding(
@@ -23,19 +22,22 @@ class WeightTrackingView extends StatelessWidget {
             CardDecoration(
               color: Theme.of(context).colorScheme.primaryContainer,
               child: Padding(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.symmetric(vertical: 8),
                 child: SizedBox(
                   height: 240,
-                  child: WeightChart(weights: weights),
+                  child: WeightChart(
+                    weights: state.weights,
+                    averageWeights: state.averageWeights,
+                  ),
                 ),
               ),
             ),
             const TimeRangeSelector(),
             Expanded(
               child: ListView.builder(
-                itemCount: cubit.state.weights.length,
+                itemCount: state.weights.length,
                 itemBuilder: (context, index) {
-                  final weight = cubit.state.weights[index];
+                  final weight = state.weights[index];
                   return ListTile(
                     title: Text('${weight.value} kg'),
                     subtitle: Text(
@@ -44,7 +46,9 @@ class WeightTrackingView extends StatelessWidget {
                     trailing: IconButton(
                       icon: const Icon(Icons.delete_outline),
                       onPressed: () {
-                        cubit.deleteEntry(weight.id!);
+                        context
+                            .read<WeightTrackingCubit>()
+                            .deleteEntry(weight.id!);
                       },
                     ),
                   );

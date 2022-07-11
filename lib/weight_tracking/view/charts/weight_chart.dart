@@ -7,9 +7,11 @@ class WeightChart extends StatelessWidget {
   const WeightChart({
     super.key,
     required this.weights,
+    required this.averageWeights,
   });
 
   final List<Weight> weights;
+  final List<Weight> averageWeights;
 
   @override
   Widget build(BuildContext context) {
@@ -20,11 +22,17 @@ class WeightChart extends StatelessWidget {
       key: UniqueKey(),
       legend: Legend(isVisible: false),
       plotAreaBorderWidth: 0,
+      margin: EdgeInsets.zero,
       primaryYAxis: NumericAxis(
+        // opposedPosition: true,
+        isVisible: true,
+        tickPosition: TickPosition.inside,
+        edgeLabelPlacement: EdgeLabelPlacement.hide,
         axisLine: const AxisLine(
           color: Colors.transparent,
           width: 0,
         ),
+        labelPosition: ChartDataLabelPosition.inside,
         minorGridLines: const MinorGridLines(width: 0),
         majorGridLines: const MajorGridLines(
           width: 0.5,
@@ -48,25 +56,45 @@ class WeightChart extends StatelessWidget {
         majorTickLines: const MajorTickLines(size: 0),
         labelStyle: labelStyle,
         rangePadding: ChartRangePadding.round,
+        labelIntersectAction: AxisLabelIntersectAction.hide,
+        edgeLabelPlacement: EdgeLabelPlacement.hide,
         interval: 2,
         borderWidth: 0,
       ),
       series: [
         SplineAreaSeries<Weight, DateTime>(
+          dataSource: averageWeights,
+          xValueMapper: (Weight weight, _) => weight.timestamp,
+          yValueMapper: (Weight weight, _) => weight.value,
+          isVisibleInLegend: false,
+          color: Theme.of(context).primaryColor.darken(),
+          borderWidth: 1,
+          splineType: SplineType.monotonic,
+          borderColor: Theme.of(context).primaryColor.darken(),
+          gradient: LinearGradient(
+            colors: [
+              Theme.of(context).primaryColor,
+              Theme.of(context).primaryColor.withOpacity(0),
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        ScatterSeries<Weight, DateTime>(
           dataSource: weights,
           xValueMapper: (Weight weight, _) => weight.timestamp,
           yValueMapper: (Weight weight, _) => weight.value,
           isVisibleInLegend: false,
-          splineType: SplineType.monotonic,
           markerSettings: MarkerSettings(
             isVisible: true,
             color: Theme.of(context).primaryColor.darken(),
             shape: DataMarkerType.circle,
-            height: 4,
-            width: 4,
+            height: 6,
+            width: 6,
+            borderWidth: 1,
           ),
           color: Theme.of(context).primaryColor.darken(),
-          borderWidth: 2,
+          borderWidth: 1,
           borderColor: Theme.of(context).primaryColor.darken(),
           gradient: LinearGradient(
             colors: [

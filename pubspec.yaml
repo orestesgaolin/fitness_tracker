@@ -12,6 +12,7 @@ dependencies:
     path: packages/app_ui
   bloc: ^8.0.3
   clock: ^1.1.0
+  collection: ^1.16.0
   database_client:
     path: packages/database_client
   equatable: ^2.0.3

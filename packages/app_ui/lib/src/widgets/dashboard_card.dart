@@ -87,15 +87,17 @@ class CardDecoration extends StatelessWidget {
     super.key,
     required this.child,
     required this.color,
+    this.padding = const EdgeInsets.all(8),
   });
 
   final Widget child;
   final Color color;
+  final EdgeInsets padding;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8),
+      padding: padding,
       child: Material(
         color: color,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),

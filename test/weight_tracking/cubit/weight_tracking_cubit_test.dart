@@ -100,7 +100,7 @@ void main() {
         },
         expect: () => <WeightTrackingState>[
           WeightTrackingState(defaultWeights),
-          WeightTrackingState(defaultWeights, TimeRange.lastYear),
+          WeightTrackingState(defaultWeights, const [], TimeRange.lastYear),
         ],
       );
     });
