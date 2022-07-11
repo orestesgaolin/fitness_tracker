@@ -112,7 +112,7 @@ class _HorizontalCalendarListViewState
                 );
               },
               child: SizedBox(
-                width: 120,
+                width: 140,
                 key: ValueKey(monthDate.month),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
