@@ -1,0 +1,21 @@
+name: measurements_repository
+
+on:
+  pull_request:
+    paths:
+      - "packages/measurements_repository/**"
+      - ".github/workflows/measurements_repository.yaml"
+
+jobs:
+  build:
+    defaults:
+      run:
+        working-directory: ./packages/measurements_repository
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
+        with:
+          flutter_channel: stable
+          flutter_version: 3.0.4
+          min_coverage: 0
