@@ -2,6 +2,7 @@ import 'package:animations/animations.dart';
 import 'package:app_ui/app_ui.dart';
 import 'package:fitness/dashboard/dashboard.dart';
 import 'package:fitness/home/home.dart';
+import 'package:fitness/settings/settings.dart';
 import 'package:fitness/weight_tracking/weight_tracking.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,7 +19,7 @@ class HomeView extends StatelessWidget {
       HomeSelection.home: const DashboardPage(),
       HomeSelection.activity: const WeightTrackingPage(),
       HomeSelection.alarms: const SizedBox.expand(),
-      HomeSelection.settings: const SizedBox.expand(),
+      HomeSelection.settings: const SettingsPage(),
     };
     return Scaffold(
       body: Stack(

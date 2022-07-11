@@ -20,5 +20,11 @@
     "allTime": "All time",
     "lastYear": "Last year",
     "last30Days": "Last 30 days",
-    "bodyWeight": "Body weight"
+    "bodyWeight": "Body weight",
+    "settings": "Settings",
+    "themeMode": "Theme mode",
+    "notifications": "Notifications",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
 }
