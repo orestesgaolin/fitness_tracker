@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:measurements_repository/measurements_repository.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
+import 'package:settings_repository/settings_repository.dart';
 
 void main() {
   bootstrap(() async {
@@ -16,8 +17,12 @@ void main() {
 
     final databaseClient = DatabaseClient(file);
     final measurementsRepository = MeasurementsRepository(databaseClient);
+    final settingsRepository = SettingsRepository(databaseClient);
+    final settings = await settingsRepository.settings().first;
     return App(
+      initialSettings: settings,
       measurementsRepository: measurementsRepository,
+      settingsRepository: settingsRepository,
     );
   });
 }
