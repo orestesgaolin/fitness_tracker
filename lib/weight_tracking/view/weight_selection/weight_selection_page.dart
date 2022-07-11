@@ -9,7 +9,7 @@ class WeightSelectionPage extends StatelessWidget {
     required this.initialWeight,
   });
 
-  final double initialWeight;
+  final double? initialWeight;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class WeightSelectionPage extends StatelessWidget {
       child: Builder(
         builder: (context) {
           return WeightSelectionLayout(
-            initialWeight: initialWeight,
+            initialWeight: initialWeight ?? 70.0,
             onChanged: (value, dateTime) {},
             onSubmitted: (value, dateTime) {
               context

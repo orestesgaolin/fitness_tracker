@@ -64,8 +64,9 @@ class DashboardView extends StatelessWidget {
                     color: Theme.of(context).colorScheme.primaryContainer,
                   ),
                   DashboardCard(
-                    title: l10n.weight,
-                    value: state.weight.toStringAsFixed(1),
+                    title:
+                        state.weight == null ? l10n.recordWeight : l10n.weight,
+                    value: state.weight?.toStringAsFixed(1),
                     valueUnit: 'kg',
                     color: Theme.of(context).colorScheme.tertiaryContainer,
                     onTap: () {

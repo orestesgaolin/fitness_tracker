@@ -5,6 +5,7 @@
     "workout": "Workout",
     "addSession": "Add Session",
     "weight": "Weight",
+    "recordWeight": "Add Weight 🖊",
     "update": "Update",
     "steps": "Steps Today",
     "stepsCount": "{count} steps",

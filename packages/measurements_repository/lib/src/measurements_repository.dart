@@ -22,11 +22,11 @@ class MeasurementsRepository {
         .map((e) => e.map(Weight.fromDatabase).toList());
   }
 
-  Stream<WeightProgress> latestWeight() {
+  Stream<WeightProgress?> latestWeight() {
     return databaseClient.weightEntries(limit: 2, descending: true).map(
       (e) {
         if (e.isEmpty) {
-          return const WeightProgress(0, 0);
+          return null;
         }
         final previousValue = e.length == 2 ? e[1] : e[0];
         return WeightProgress(e.first.value, previousValue.value);

@@ -11,14 +11,14 @@ class DashboardCubit extends Cubit<DashboardState> {
       : super(DashboardState());
 
   final MeasurementsRepository measurementsRepository;
-  StreamSubscription<WeightProgress>? _weightListener;
+  StreamSubscription<WeightProgress?>? _weightListener;
 
   void init() {
     _weightListener = measurementsRepository.latestWeight().listen((weights) {
       emit(
         state.copyWith(
-          weight: weights.value,
-          weightChange: weights.offset,
+          weight: weights?.value,
+          weightChange: weights?.offset,
         ),
       );
     });

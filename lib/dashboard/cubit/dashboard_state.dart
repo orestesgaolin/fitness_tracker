@@ -5,21 +5,21 @@ class DashboardState extends Equatable {
     DateTime? startDate,
     DateTime? selectedDate,
     this.steps = 0,
-    this.weight = 0,
+    this.weight,
     this.weightChange = 0,
     this.hasWorkoutSession = false,
   })  : startDate = startDate ?? DateTime.now().stripDetails(),
         selectedDate = selectedDate ?? DateTime.now().stripDetails();
 
   final int steps;
-  final double weight;
+  final double? weight;
   final double weightChange;
   final bool hasWorkoutSession;
   final DateTime startDate;
   final DateTime selectedDate;
 
   @override
-  List<Object> get props {
+  List<Object?> get props {
     return [
       steps,
       weight,
