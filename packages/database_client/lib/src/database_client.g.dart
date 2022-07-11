@@ -253,12 +253,191 @@ class $WeightEntryModelTable extends WeightEntryModel
   }
 }
 
+class SettingsEntry extends DataClass implements Insertable<SettingsEntry> {
+  final String key;
+  final String value;
+  SettingsEntry({required this.key, required this.value});
+  factory SettingsEntry.fromData(Map<String, dynamic> data, {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return SettingsEntry(
+      key: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}key'])!,
+      value: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}value'])!,
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['key'] = Variable<String>(key);
+    map['value'] = Variable<String>(value);
+    return map;
+  }
+
+  SettingsEntryModelCompanion toCompanion(bool nullToAbsent) {
+    return SettingsEntryModelCompanion(
+      key: Value(key),
+      value: Value(value),
+    );
+  }
+
+  factory SettingsEntry.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SettingsEntry(
+      key: serializer.fromJson<String>(json['key']),
+      value: serializer.fromJson<String>(json['value']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'key': serializer.toJson<String>(key),
+      'value': serializer.toJson<String>(value),
+    };
+  }
+
+  SettingsEntry copyWith({String? key, String? value}) => SettingsEntry(
+        key: key ?? this.key,
+        value: value ?? this.value,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('SettingsEntry(')
+          ..write('key: $key, ')
+          ..write('value: $value')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(key, value);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SettingsEntry &&
+          other.key == this.key &&
+          other.value == this.value);
+}
+
+class SettingsEntryModelCompanion extends UpdateCompanion<SettingsEntry> {
+  final Value<String> key;
+  final Value<String> value;
+  const SettingsEntryModelCompanion({
+    this.key = const Value.absent(),
+    this.value = const Value.absent(),
+  });
+  SettingsEntryModelCompanion.insert({
+    required String key,
+    required String value,
+  })  : key = Value(key),
+        value = Value(value);
+  static Insertable<SettingsEntry> custom({
+    Expression<String>? key,
+    Expression<String>? value,
+  }) {
+    return RawValuesInsertable({
+      if (key != null) 'key': key,
+      if (value != null) 'value': value,
+    });
+  }
+
+  SettingsEntryModelCompanion copyWith(
+      {Value<String>? key, Value<String>? value}) {
+    return SettingsEntryModelCompanion(
+      key: key ?? this.key,
+      value: value ?? this.value,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (key.present) {
+      map['key'] = Variable<String>(key.value);
+    }
+    if (value.present) {
+      map['value'] = Variable<String>(value.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SettingsEntryModelCompanion(')
+          ..write('key: $key, ')
+          ..write('value: $value')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $SettingsEntryModelTable extends SettingsEntryModel
+    with TableInfo<$SettingsEntryModelTable, SettingsEntry> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SettingsEntryModelTable(this.attachedDatabase, [this._alias]);
+  final VerificationMeta _keyMeta = const VerificationMeta('key');
+  @override
+  late final GeneratedColumn<String?> key = GeneratedColumn<String?>(
+      'key', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _valueMeta = const VerificationMeta('value');
+  @override
+  late final GeneratedColumn<String?> value = GeneratedColumn<String?>(
+      'value', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [key, value];
+  @override
+  String get aliasedName => _alias ?? 'settings_entry_model';
+  @override
+  String get actualTableName => 'settings_entry_model';
+  @override
+  VerificationContext validateIntegrity(Insertable<SettingsEntry> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('key')) {
+      context.handle(
+          _keyMeta, key.isAcceptableOrUnknown(data['key']!, _keyMeta));
+    } else if (isInserting) {
+      context.missing(_keyMeta);
+    }
+    if (data.containsKey('value')) {
+      context.handle(
+          _valueMeta, value.isAcceptableOrUnknown(data['value']!, _valueMeta));
+    } else if (isInserting) {
+      context.missing(_valueMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {key};
+  @override
+  SettingsEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return SettingsEntry.fromData(data,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $SettingsEntryModelTable createAlias(String alias) {
+    return $SettingsEntryModelTable(attachedDatabase, alias);
+  }
+}
+
 abstract class _$DatabaseClient extends GeneratedDatabase {
   _$DatabaseClient(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   late final $WeightEntryModelTable weightEntryModel =
       $WeightEntryModelTable(this);
+  late final $SettingsEntryModelTable settingsEntryModel =
+      $SettingsEntryModelTable(this);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [weightEntryModel];
+  List<DatabaseSchemaEntity> get allSchemaEntities =>
+      [weightEntryModel, settingsEntryModel];
 }

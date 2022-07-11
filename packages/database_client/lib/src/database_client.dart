@@ -10,13 +10,28 @@ part 'database_client.g.dart';
 /// {@template database_client}
 /// Package connecting to the local database
 /// {@endtemplate}
-@DriftDatabase(tables: [WeightEntryModel])
+@DriftDatabase(tables: [WeightEntryModel, SettingsEntryModel])
 class DatabaseClient extends _$DatabaseClient {
   /// {@macro database_client}
   DatabaseClient(File file) : super(NativeDatabase(file));
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration {
+    return MigrationStrategy(
+      onCreate: (Migrator m) async {
+        await m.createAll();
+      },
+      onUpgrade: (Migrator m, int from, int to) async {
+        if (from < 2) {
+          // we added the [SettingsEntryModel]
+          await m.createTable(settingsEntryModel);
+        }
+      },
+    );
+  }
 
   Stream<List<WeightEntry>> weightEntries({
     DateTime? startDate,
@@ -54,6 +69,22 @@ class DatabaseClient extends _$DatabaseClient {
   Future<int> deleteWeight({required int id}) {
     return (delete(weightEntryModel)..where((tbl) => tbl.id.equals(id))).go();
   }
+
+  Stream<Map<String, String>> settingsEntries() {
+    final query = select(settingsEntryModel);
+
+    return query.watch().map(
+          (event) => {for (final v in event) v.key: v.value},
+        );
+  }
+
+  Future<void> saveSettings(Map<String, String> settings) async {
+    for (final setting in settings.entries) {
+      await into(settingsEntryModel).insertOnConflictUpdate(
+        SettingsEntry(key: setting.key, value: setting.value),
+      );
+    }
+  }
 }
 
 @DataClassName('WeightEntry')
@@ -62,4 +93,13 @@ class WeightEntryModel extends Table {
   RealColumn get value => real()();
   DateTimeColumn get timestamp => dateTime()();
   DateTimeColumn get created => dateTime().withDefault(currentDateAndTime)();
+}
+
+@DataClassName('SettingsEntry')
+class SettingsEntryModel extends Table {
+  TextColumn get key => text()();
+  TextColumn get value => text()();
+
+  @override
+  Set<Column> get primaryKey => {key};
 }
