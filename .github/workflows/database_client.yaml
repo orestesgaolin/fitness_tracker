@@ -1,0 +1,21 @@
+name: database_client
+
+on:
+  pull_request:
+    paths:
+      - "packages/database_client/**"
+      - ".github/workflows/database_client.yaml"
+
+jobs:
+  build:
+    defaults:
+      run:
+        working-directory: ./packages/database_client
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
+        with:
+          flutter_channel: stable
+          flutter_version: 3.0.4
+          min_coverage: 0
