@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:clock/clock.dart';
 import 'package:equatable/equatable.dart';
 import 'package:measurements_repository/measurements_repository.dart';
 
@@ -14,7 +15,7 @@ class WeightTrackingCubit extends Cubit<WeightTrackingState> {
   StreamSubscription<List<Weight>>? _listener;
 
   void init([TimeRange? range]) {
-    final now = DateTime.now();
+    final now = clock.now();
     final duration = (range ?? state.timeRange).duration();
     final startDate = duration != null ? now.subtract(duration) : DateTime(0);
     _listener = measurementsRepository
@@ -24,22 +25,30 @@ class WeightTrackingCubit extends Cubit<WeightTrackingState> {
     });
   }
 
-  void addWeight(
+  Future<void> addWeight(
     double? value, {
     DateTime? timestamp,
-  }) {
-    if (value != null) {
-      measurementsRepository.saveWeight(
-        Weight(
-          value,
-          timestamp ?? DateTime.now(),
-        ),
-      );
+  }) async {
+    try {
+      if (value != null) {
+        await measurementsRepository.saveWeight(
+          Weight(
+            value,
+            timestamp ?? clock.now(),
+          ),
+        );
+      }
+    } catch (e, s) {
+      addError(e, s);
     }
   }
 
   void deleteEntry(int id) {
-    measurementsRepository.deleteWeight(id: id);
+    try {
+      measurementsRepository.deleteWeight(id: id);
+    } catch (e, s) {
+      addError(e, s);
+    }
   }
 
   void changeTimeRange(TimeRange range) {
