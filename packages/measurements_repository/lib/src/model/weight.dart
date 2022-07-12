@@ -67,12 +67,12 @@ class WeightProgress extends Equatable {
 /// averages per month starting from the earliest date
 ///
 /// For shorter time spans it will fit them into weeks.
-AverageWeights averageWeights(List<Weight> weights) {
+List<Weight> averageWeights(List<Weight> weights) {
   if (weights.isEmpty) {
-    return const AverageWeights.empty();
+    return const [];
   }
   if (weights.length == 1) {
-    return const AverageWeights.empty();
+    return const [];
   }
 
   final minTimestamp =
@@ -123,40 +123,12 @@ AverageWeights averageWeights(List<Weight> weights) {
       }
     }
   }
-  results.add(Weight(results.last.value, maxDate));
+  final lastAverage = (results.last.value + weights.last.value) / 2;
+  if (!results.last.timestamp.isAtSameMomentAs(maxDate)) {
+    results.add(Weight(lastAverage, maxDate));
+  }
 
-  return AverageWeights(results, timeSpan);
-}
-
-/// {@template average_weights}
-/// Class wrapping the list of average weights for a given period
-///
-/// To generate use [averageWeights] function:
-///
-/// ```dart
-/// final averages = averageWeights(inputWeights);
-/// ```
-/// {@endtemplate}
-class AverageWeights extends Equatable {
-  /// {@macro average_weights}
-  const AverageWeights(this.weights, this.timeSpan);
-
-  /// {@macro average_weights}
-  ///
-  /// Creates object with empty list and zero timespan
-  const AverageWeights.empty() : this(const [], Duration.zero);
-
-  /// Calculated average weights
-  final List<Weight> weights;
-
-  /// The overall timespan of the data in [weights]
-  final Duration timeSpan;
-
-  /// Handy getter to get 5% of the timespan in [Duration]
-  Duration get fivePercentOfTimeSpan => Duration(days: timeSpan.inDays ~/ 20);
-
-  @override
-  List<Object?> get props => [weights];
+  return results;
 }
 
 /// {@template year_and_week}

@@ -1,17 +1,29 @@
 import 'package:app_ui/app_ui.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:measurements_repository/measurements_repository.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class WeightChart extends StatelessWidget {
-  const WeightChart({
+  WeightChart({
     super.key,
     required this.weights,
     required this.averageWeights,
-  });
+  }) {
+    timeSpan = weights.lastOrNull?.timestamp.difference(
+          weights.firstOrNull?.timestamp ?? weights.last.timestamp,
+        ) ??
+        Duration.zero;
+  }
+
+  /// Handy getter to get 5% of the timespan in [Duration]
+  Duration get fivePercentOfTimeSpan => Duration(days: timeSpan.inDays ~/ 20);
+
+  /// The overall timespan of the data in [weights]
+  late final Duration timeSpan;
 
   final List<Weight> weights;
-  final AverageWeights averageWeights;
+  final List<Weight> averageWeights;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +69,7 @@ class WeightChart extends StatelessWidget {
         labelStyle: labelStyle,
         rangePadding: ChartRangePadding.normal,
         maximum: weights.isNotEmpty
-            ? weights.last.timestamp.add(averageWeights.fivePercentOfTimeSpan)
+            ? weights.last.timestamp.add(fivePercentOfTimeSpan)
             : null,
         labelIntersectAction: AxisLabelIntersectAction.hide,
         edgeLabelPlacement: EdgeLabelPlacement.hide,
@@ -65,7 +77,7 @@ class WeightChart extends StatelessWidget {
       ),
       series: [
         SplineAreaSeries<Weight, DateTime>(
-          dataSource: averageWeights.weights,
+          dataSource: averageWeights,
           xValueMapper: (Weight weight, _) => weight.timestamp,
           yValueMapper: (Weight weight, _) => weight.value,
           isVisibleInLegend: false,

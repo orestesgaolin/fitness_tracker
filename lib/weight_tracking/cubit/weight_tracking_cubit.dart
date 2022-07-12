@@ -25,7 +25,7 @@ class WeightTrackingCubit extends Cubit<WeightTrackingState> {
       emit(
         state.copyWith(
           weights: weights,
-          averageWeights: const AverageWeights.empty(),
+          averageWeights: [],
         ),
       );
       final averages = await compute(averageWeights, weights);
@@ -60,7 +60,13 @@ class WeightTrackingCubit extends Cubit<WeightTrackingState> {
   }
 
   void changeTimeRange(TimeRange range) {
-    emit(state.copyWith(timeRange: range));
+    emit(
+      state.copyWith(
+        timeRange: range,
+        averageWeights: [],
+        weights: [],
+      ),
+    );
     _weightListener?.cancel();
     init(range);
   }

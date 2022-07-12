@@ -3,12 +3,12 @@ part of 'weight_tracking_cubit.dart';
 class WeightTrackingState extends Equatable {
   const WeightTrackingState(
     this.weights, [
-    this.averageWeights = const AverageWeights.empty(),
+    this.averageWeights = const [],
     this.timeRange = TimeRange.last30Days,
   ]);
 
   final List<Weight> weights;
-  final AverageWeights averageWeights;
+  final List<Weight> averageWeights;
   final TimeRange timeRange;
 
   @override
@@ -20,7 +20,7 @@ class WeightTrackingState extends Equatable {
 
   WeightTrackingState copyWith({
     List<Weight>? weights,
-    AverageWeights? averageWeights,
+    List<Weight>? averageWeights,
     TimeRange? timeRange,
   }) {
     return WeightTrackingState(

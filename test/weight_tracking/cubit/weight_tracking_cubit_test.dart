@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, lines_longer_than_80_chars
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:clock/clock.dart';
@@ -14,13 +14,18 @@ void main() {
   group('WeightTrackingCubit', () {
     late MeasurementsRepository measurementsRepository;
     final now = DateTime(2022, 6, 2);
-    final todayWeight = Weight(9999, now);
+    final todayWeight = Weight(4, now);
     final yearAgoAlmost = now.subtract(Duration(days: 350));
     final defaultWeights = [
       Weight(1, yearAgoAlmost),
       Weight(2, yearAgoAlmost.add(Duration(days: 1))),
       Weight(3, yearAgoAlmost.add(Duration(days: 1))),
       todayWeight,
+    ];
+    final averageWeights = [
+      Weight(1, yearAgoAlmost),
+      Weight(4, now.subtract(Duration(days: 1))),
+      Weight(4, now),
     ];
 
     setUpAll(() {
@@ -58,8 +63,10 @@ void main() {
         Clock.fixed(now),
         () => WeightTrackingCubit(measurementsRepository)..init(),
       ),
+      wait: Duration(milliseconds: 100),
       expect: () => <WeightTrackingState>[
         WeightTrackingState(defaultWeights),
+        WeightTrackingState(defaultWeights, averageWeights),
       ],
       verify: (b) {
         verify(
@@ -91,18 +98,23 @@ void main() {
     group('changeTimeRange', () {
       blocTest<WeightTrackingCubit, WeightTrackingState>(
         'changes the timeRange and updates the weights',
-        build: () => WeightTrackingCubit(measurementsRepository),
+        build: () => WeightTrackingCubit(measurementsRepository)..init(),
         act: (b) async {
-          b.init();
+          // b.init();
           // let the stream emit value
-          await Future<void>.delayed(Duration.zero);
+          await Future<void>.delayed(Duration(milliseconds: 100));
+
           b.changeTimeRange(TimeRange.lastYear);
         },
+        wait: Duration(milliseconds: 100),
         expect: () => <WeightTrackingState>[
           WeightTrackingState(defaultWeights),
+          WeightTrackingState(defaultWeights, averageWeights),
+          WeightTrackingState([], [], TimeRange.lastYear),
+          WeightTrackingState(defaultWeights, [], TimeRange.lastYear),
           WeightTrackingState(
             defaultWeights,
-            AverageWeights.empty(),
+            averageWeights,
             TimeRange.lastYear,
           ),
         ],
