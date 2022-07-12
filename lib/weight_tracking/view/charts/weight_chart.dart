@@ -58,7 +58,6 @@ class WeightChart extends StatelessWidget {
         rangePadding: ChartRangePadding.round,
         labelIntersectAction: AxisLabelIntersectAction.hide,
         edgeLabelPlacement: EdgeLabelPlacement.hide,
-        interval: 2,
         borderWidth: 0,
       ),
       series: [
