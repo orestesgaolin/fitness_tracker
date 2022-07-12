@@ -74,6 +74,9 @@ List<Weight> averageWeights(List<Weight> weights) {
   if (weights.length == 1) {
     return const [];
   }
+  if (weights.length == 2) {
+    return weights;
+  }
 
   final minTimestamp =
       weights.map((e) => e.timestamp.millisecondsSinceEpoch).reduce(math.min);
@@ -85,8 +88,7 @@ List<Weight> averageWeights(List<Weight> weights) {
   final timeSpan = Duration(milliseconds: maxTimestamp - minTimestamp);
 
   final results = <Weight>[];
-
-  // Start with the first entry
+// Start with the first entry
   results.add(Weight(weights.first.value, minDate));
 
   if (timeSpan > const Duration(days: 30)) {
@@ -123,9 +125,11 @@ List<Weight> averageWeights(List<Weight> weights) {
       }
     }
   }
-  final lastAverage = (results.last.value + weights.last.value) / 2;
-  if (!results.last.timestamp.isAtSameMomentAs(maxDate)) {
-    results.add(Weight(lastAverage, maxDate));
+  if (results.last.timestamp.isBefore(maxDate)) {
+    final lastAverage = (results.last.value + weights.last.value) / 2;
+    if (!results.last.timestamp.isAtSameMomentAs(maxDate)) {
+      results.add(Weight(lastAverage, maxDate));
+    }
   }
 
   return results;
