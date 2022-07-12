@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs
 
 import 'package:database_client/database_client.dart';
-import 'package:equatable/equatable.dart';
+import 'package:measurements_repository/measurements_repository.dart';
 
 /// {@template measurements_repository}
 /// Repository responsible for handling user fitness entries
@@ -37,37 +37,4 @@ class MeasurementsRepository {
   void deleteWeight({required int id}) {
     databaseClient.deleteWeight(id: id);
   }
-}
-
-class Weight extends Equatable {
-  const Weight(
-    this.value,
-    this.timestamp, {
-    this.id,
-  });
-
-  Weight.fromDatabase(WeightEntry weightEntry)
-      : this(
-          weightEntry.value,
-          weightEntry.timestamp,
-          id: weightEntry.id,
-        );
-
-  final double value;
-  final DateTime timestamp;
-  final int? id;
-
-  @override
-  List<Object?> get props => [value, timestamp, id];
-}
-
-class WeightProgress extends Equatable {
-  const WeightProgress(this.value, double? previousValue)
-      : offset = value - (previousValue ?? value);
-
-  final double value;
-  final double offset;
-
-  @override
-  List<Object?> get props => [value, offset];
 }
