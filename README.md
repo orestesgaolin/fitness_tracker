@@ -14,6 +14,19 @@ Design inspired by [MohammadHadi Ahmadian for Obtic](https://dribbble.com/shots/
 
 ---
 
+## Roadmap
+
+- [x] Tracking body weight
+- [x] Displaying body weight as a nice looking chart
+- [ ] Tracking exercises and notes
+- [ ] Planning exercise sessions
+- [ ] Notifications and reminders
+- [ ] Import and export of data
+- [ ] Integration with Google Fit/Apple HealthKit/Samsung Health
+- [ ] Online sync with desired provider (e.g. Dropbox)
+
+# Contributing and development
+
 ## Getting Started 🚀
 
 This project contains 3 flavors:
