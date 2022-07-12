@@ -67,12 +67,12 @@ class WeightProgress extends Equatable {
 /// averages per month starting from the earliest date
 ///
 /// For shorter time spans it will fit them into weeks.
-List<Weight> averageWeights(List<Weight> weights) {
+AverageWeights averageWeights(List<Weight> weights) {
   if (weights.isEmpty) {
-    return [];
+    return const AverageWeights.empty();
   }
   if (weights.length == 1) {
-    return [];
+    return const AverageWeights.empty();
   }
 
   final minTimestamp =
@@ -87,7 +87,7 @@ List<Weight> averageWeights(List<Weight> weights) {
   final results = <Weight>[];
 
   // Start with the first entry
-  results.add(weights.first);
+  results.add(Weight(weights.first.value, minDate));
 
   if (timeSpan > const Duration(days: 30)) {
     final grouped = weights.groupListsBy<DateTime>(
@@ -98,7 +98,7 @@ List<Weight> averageWeights(List<Weight> weights) {
     );
 
     for (final group in grouped.entries) {
-      if (group.key.isAfter(minDate) && group.key.isBefore(maxDate)) {
+      if (group.key.isBetween(minDate, maxDate)) {
         final weight = Weight(
           group.value.map((e) => e.value).average,
           group.key,
@@ -107,33 +107,130 @@ List<Weight> averageWeights(List<Weight> weights) {
       }
     }
   } else {
-    for (var date = DateTime.fromMillisecondsSinceEpoch(minTimestamp);
-        date.millisecondsSinceEpoch < maxTimestamp;
-        date = date.add(const Duration(days: 7))) {
-      final entriesInWeek = weights.where(
-        (element) => element.timestamp
-            .isBetween(date, date.add(const Duration(days: 7))),
-      );
-      final average = entriesInWeek.map((e) => e.value).average;
-      final averageDate = date.add(const Duration(days: 3, hours: 12));
-      if (averageDate.isAfter(minDate) && averageDate.isBefore(maxDate)) {
+    final grouped = weights.groupListsBy(
+      (element) => YearAndWeek(
+        element.timestamp.year,
+        element.timestamp.weekOfYear,
+      ),
+    );
+    for (final group in grouped.entries) {
+      if (group.key.date.isBetween(minDate, maxDate)) {
         final weight = Weight(
-          average,
-          averageDate,
+          group.value.map((e) => e.value).average,
+          group.key.date,
         );
         results.add(weight);
       }
     }
   }
-  results.add(weights.last);
+  results.add(Weight(results.last.value, maxDate));
 
-  return results;
+  return AverageWeights(results, timeSpan);
+}
+
+/// {@template average_weights}
+/// Class wrapping the list of average weights for a given period
+///
+/// To generate use [averageWeights] function:
+///
+/// ```dart
+/// final averages = averageWeights(inputWeights);
+/// ```
+/// {@endtemplate}
+class AverageWeights extends Equatable {
+  /// {@macro average_weights}
+  const AverageWeights(this.weights, this.timeSpan);
+
+  /// {@macro average_weights}
+  ///
+  /// Creates object with empty list and zero timespan
+  const AverageWeights.empty() : this(const [], Duration.zero);
+
+  /// Calculated average weights
+  final List<Weight> weights;
+
+  /// The overall timespan of the data in [weights]
+  final Duration timeSpan;
+
+  /// Handy getter to get 5% of the timespan in [Duration]
+  Duration get fivePercentOfTimeSpan => Duration(days: timeSpan.inDays ~/ 20);
+
+  @override
+  List<Object?> get props => [weights];
+}
+
+/// {@template year_and_week}
+/// Utility class to wrap a [DateTime] with
+/// the information about the year and week number
+/// {@endtemplate}
+class YearAndWeek extends Equatable {
+  /// {@macro year_and_week}
+  const YearAndWeek(this.year, this.week);
+
+  // ignore: public_member_api_docs
+  final int year;
+  // ignore: public_member_api_docs
+  final int week;
+
+  /// Returns the original [DateTime] for a given instance
+  DateTime get date => DateTime(year)
+      .add(Duration(days: (week - 1) * 7))
+      .add(const Duration(days: 3));
+
+  @override
+  List<Object?> get props => [
+        year,
+        week,
+      ];
 }
 
 extension on DateTime {
+  /// Checks if date is between [start] and [end] inclusive
   bool isBetween(DateTime start, DateTime end) {
     return isAtSameMomentAs(start) ||
         (isAfter(start) && isBefore(end)) ||
         isAtSameMomentAs(end);
+  }
+
+  /// The ISO 8601 week of year [1..53].
+  ///
+  /// Algorithm from https://en.wikipedia.org/wiki/ISO_week_date#Algorithms
+  int get weekOfYear {
+    // Add 3 to always compare with January 4th, which is always in week 1
+    // Add 7 to index weeks starting with 1 instead of 0
+    final woy = (ordinalDate - weekday + 10) ~/ 7;
+
+    // If the week number equals zero, it means that the given date belongs
+    // to the preceding (week-based) year.
+    if (woy == 0) {
+      // The 28th of December is always in the last week of the year
+      return DateTime(year - 1, 12, 28).weekOfYear;
+    }
+
+    // If the week number equals 53, one must check that the date
+    // is not actually in week 1 of the following year
+    if (woy == 53 &&
+        DateTime(year).weekday != DateTime.thursday &&
+        DateTime(year, 12, 31).weekday != DateTime.thursday) {
+      return 1;
+    }
+
+    return woy;
+  }
+
+  /// The ordinal date, the number of days since December 31st
+  /// the previous year.
+  ///
+  /// January 1st has the ordinal date 1
+  ///
+  /// December 31st has the ordinal date 365, or 366 in leap years
+  int get ordinalDate {
+    const offsets = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+    return offsets[month - 1] + day + (isLeapYear && month > 2 ? 1 : 0);
+  }
+
+  /// True if this date is on a leap year.
+  bool get isLeapYear {
+    return year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
   }
 }

@@ -11,7 +11,7 @@ class WeightChart extends StatelessWidget {
   });
 
   final List<Weight> weights;
-  final List<Weight> averageWeights;
+  final AverageWeights averageWeights;
 
   @override
   Widget build(BuildContext context) {
@@ -55,20 +55,23 @@ class WeightChart extends StatelessWidget {
         majorGridLines: const MajorGridLines(width: 0),
         majorTickLines: const MajorTickLines(size: 0),
         labelStyle: labelStyle,
-        rangePadding: ChartRangePadding.round,
+        rangePadding: ChartRangePadding.normal,
+        maximum: weights.isNotEmpty
+            ? weights.last.timestamp.add(averageWeights.fivePercentOfTimeSpan)
+            : null,
         labelIntersectAction: AxisLabelIntersectAction.hide,
         edgeLabelPlacement: EdgeLabelPlacement.hide,
         borderWidth: 0,
       ),
       series: [
         SplineAreaSeries<Weight, DateTime>(
-          dataSource: averageWeights,
+          dataSource: averageWeights.weights,
           xValueMapper: (Weight weight, _) => weight.timestamp,
           yValueMapper: (Weight weight, _) => weight.value,
           isVisibleInLegend: false,
           color: Theme.of(context).primaryColor.darken(),
           borderWidth: 1,
-          splineType: SplineType.monotonic,
+          splineType: SplineType.natural,
           borderColor: Theme.of(context).primaryColor.darken(),
           gradient: LinearGradient(
             colors: [

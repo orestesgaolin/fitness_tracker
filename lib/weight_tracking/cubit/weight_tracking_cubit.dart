@@ -25,7 +25,7 @@ class WeightTrackingCubit extends Cubit<WeightTrackingState> {
       emit(
         state.copyWith(
           weights: weights,
-          averageWeights: [],
+          averageWeights: const AverageWeights.empty(),
         ),
       );
       final averages = await compute(averageWeights, weights);
