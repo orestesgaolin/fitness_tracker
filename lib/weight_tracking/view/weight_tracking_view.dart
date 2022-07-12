@@ -35,6 +35,7 @@ class WeightTrackingView extends StatelessWidget {
             const TimeRangeSelector(),
             Expanded(
               child: ListView.builder(
+                padding: const EdgeInsets.only(bottom: 150),
                 itemCount: state.weights.length,
                 itemBuilder: (context, index) {
                   final weight = state.weights[index];
