@@ -22,10 +22,12 @@ class WeightSelectionLayout extends StatefulWidget {
 
 class _WeightSelectionLayoutState extends State<WeightSelectionLayout> {
   late double currentValue;
-  DateTime dateTime = DateTime.now();
+  late DateTime dateTime;
 
   @override
   void initState() {
+    final now = DateTime.now();
+    dateTime = DateTime(now.year, now.month, now.day);
     currentValue = widget.initialWeight;
     super.initState();
   }
