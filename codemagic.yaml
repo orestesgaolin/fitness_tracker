@@ -1,0 +1,202 @@
+definitions:
+  environment:
+    emails: &emails
+      - dominik@roszkowski.dev
+workflows:
+  staging:
+    name: staging
+    max_build_duration: 60
+    environment:
+      groups:
+        - APP
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+      vars:
+        FLAVOR: staging
+        BUNDLE_ID: dev.roszkowski.fitness.stg
+    cache:
+      cache_paths:
+        - $HOME/Library/Caches/CocoaPods
+        - $FLUTTER_ROOT/.pub-cache
+        - $HOME/.gradle/caches
+    triggering:
+      events:
+        - tag
+    scripts:
+      - &get_latest_tag
+        name: Get latest tag
+        script: set TAG=$(git describe --tags)
+      # - &set_up_key_properties
+      #   name: Set up Android key.properties
+      #   script: |
+      #     echo $FCI_KEYSTORE | base64 --decode > /tmp/keystore.keystore
+      #     cat >> "$FCI_BUILD_DIR/android/key.properties" <<EOF
+      #     storePassword=$FCI_KEYSTORE_PASSWORD
+      #     keyPassword=$FCI_KEY_PASSWORD
+      #     keyAlias=$FCI_KEY_ALIAS
+      #     storeFile=/tmp/keystore.keystore
+      #     EOF
+      # - &set_up_local_properties
+      #   name: Set up Android local properties
+      #   script: echo "flutter.sdk=$HOME/programs/flutter" > "$FCI_BUILD_DIR/android/local.properties"
+      - &setup_keychain
+        name: Set up keychain to be used for codesigning using Codemagic CLI 'keychain' command
+        script: keychain initialize
+      - &fetch_signing_files
+        name: Fetch signing files
+        script: |
+          app-store-connect fetch-signing-files "${BUNDLE_ID}" \
+              --type IOS_APP_STORE \
+              --create
+      - &setup_signing_certificates
+        name: Set up signing certificate
+        script: keychain add-certificates
+      - &get_packages
+        name: Get packages
+        script: flutter packages pub get
+      # - &build_apk
+      #   name: Build Android APK
+      #   script: |
+      #     flutter build apk --release \
+      #     --flavor ${FLAVOR} -t lib/main.dart \
+      #     --build-number=$PROJECT_BUILD_NUMBER \
+      #     --dart-define "BUILD_NUMBER=$PROJECT_BUILD_NUMBER"
+      # - &build_aab
+      #   name: Build Android AAB
+      #   script: |
+      #     flutter build appbundle --release \
+      #     --flavor ${FLAVOR} -t lib/main.dart \
+      #     --build-number=$PROJECT_BUILD_NUMBER \
+      #     --dart-define "BUILD_NUMBER=$PROJECT_BUILD_NUMBER"
+      - &use_profiles
+        name: Use Xcode profiles
+        script: xcode-project use-profiles
+      - &pod_install
+        name: Run pod install
+        script: find . -name "Podfile" -execdir pod install \;
+      - &build_ios
+        name: Build and sign iOS
+        script: |
+          flutter build ipa --release \
+            --flavor ${FLAVOR} -t lib/main.dart \
+            --build-number=$PROJECT_BUILD_NUMBER \
+            --dart-define "BUILD_NUMBER=$PROJECT_BUILD_NUMBER" \
+            --export-options-plist=/Users/builder/export_options.plist
+    artifacts:
+      - build/app/outputs/apk/${FLAVOR}/release/*.apk
+      - build/app/outputs/bundle/${FLAVOR}Release/*.aab
+      - build/app/outputs/mapping/**/mapping.txt
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - flutter_drive.log
+    publishing:
+      app_store_connect:
+        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
+        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
+      email:
+        recipients: *emails
+      # google_play:
+      #   credentials: $GPLAY_KEY
+      #   track: internal
+  production:
+    name: production
+    max_build_duration: 60
+    environment:
+      groups:
+        - APP
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+      vars:
+        FLAVOR: production
+        BUNDLE_ID: dev.roszkowski.fitness
+    cache:
+      cache_paths:
+        - $HOME/Library/Caches/CocoaPods
+        - $FLUTTER_ROOT/.pub-cache
+        - $HOME/.gradle/caches
+    triggering:
+      events:
+        - tag
+    scripts:
+      - *get_latest_tag
+      # - *set_up_key_properties
+      # - *set_up_local_properties
+      - *setup_keychain
+      - *fetch_signing_files
+      - *setup_signing_certificates
+      - *get_packages
+      # - *build_apk
+      # - *build_aab
+      - *use_profiles
+      - *pod_install
+      - *build_ios
+    artifacts:
+      - build/app/outputs/apk/${FLAVOR}/release/*.apk
+      - build/app/outputs/bundle/${FLAVOR}Release/*.aab
+      - build/app/outputs/mapping/**/mapping.txt
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - flutter_drive.log
+    publishing:
+      app_store_connect:
+        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
+        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
+      email:
+        recipients: *emails
+      # google_play:
+      #   credentials: $GPLAY_KEY
+      #   track: internal
+  development:
+    name: development
+    max_build_duration: 60
+    environment:
+      groups:
+        - APP
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+      vars:
+        FLAVOR: development
+        BUNDLE_ID: dev.roszkowski.fitness.dev
+    cache:
+      cache_paths:
+        - $HOME/Library/Caches/CocoaPods
+        - $FLUTTER_ROOT/.pub-cache
+        - $HOME/.gradle/caches
+    triggering:
+      events:
+        - tag
+    scripts:
+      - *get_latest_tag
+      # - *set_up_key_properties
+      # - *set_up_local_properties
+      - *setup_keychain
+      - *fetch_signing_files
+      - *setup_signing_certificates
+      - *get_packages
+      # - *build_apk
+      # - *build_aab
+      - *use_profiles
+      - *pod_install
+      - *build_ios
+    artifacts:
+      - build/app/outputs/apk/${FLAVOR}/release/*.apk
+      - build/app/outputs/bundle/${FLAVOR}Release/*.aab
+      - build/app/outputs/mapping/**/mapping.txt
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - flutter_drive.log
+    publishing:
+      app_store_connect:
+        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
+        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
+      email:
+        recipients: *emails
+      # google_play:
+      #   credentials: $GPLAY_KEY
+      #   track: internal
