@@ -21,30 +21,32 @@ class HomeView extends StatelessWidget {
       HomeSelection.alarms: const SizedBox.expand(),
       HomeSelection.settings: const SettingsPage(),
     };
-    return Scaffold(
-      body: Stack(
-        children: [
-          PageTransitionSwitcher(
-            transitionBuilder: (
-              Widget child,
-              Animation<double> animation,
-              Animation<double> secondaryAnimation,
-            ) {
-              return FadeThroughTransition(
-                animation: animation,
-                secondaryAnimation: secondaryAnimation,
-                child: child,
-              );
-            },
-            child: pages[selectedPage],
-          ),
-          const Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: _BottomBar(),
-          ),
-        ],
+    return BackButtonHandler(
+      child: Scaffold(
+        body: Stack(
+          children: [
+            PageTransitionSwitcher(
+              transitionBuilder: (
+                Widget child,
+                Animation<double> animation,
+                Animation<double> secondaryAnimation,
+              ) {
+                return FadeThroughTransition(
+                  animation: animation,
+                  secondaryAnimation: secondaryAnimation,
+                  child: child,
+                );
+              },
+              child: pages[selectedPage],
+            ),
+            const Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: _BottomBar(),
+            ),
+          ],
+        ),
       ),
     );
   }
