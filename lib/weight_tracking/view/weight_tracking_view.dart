@@ -57,7 +57,8 @@ class WeightTrackingView extends StatelessWidget {
                   final weight = state.weights[index];
                   final year =
                       weight.timestamp.year != DateTime.now().year ? ', y' : '';
-                  final note = weight.note.isNotEmpty ? '• ${weight.note}' : '';
+                  final note =
+                      weight.note.isNotEmpty ? ' • ${weight.note}' : '';
                   return ListTile(
                     onTap: () {
                       AppBottomSheet.present<void>(
@@ -68,12 +69,13 @@ class WeightTrackingView extends StatelessWidget {
                       );
                     },
                     title: Text(
-                      '${weight.value} kg$note',
+                      '${weight.value} kg',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                     subtitle: Text(
-                      DateFormat('E, MMM d$year').format(weight.timestamp),
+                      DateFormat('E, MMM d$year').format(weight.timestamp) +
+                          note,
                     ),
                     trailing: const Icon(Icons.chevron_right_rounded),
                   );
