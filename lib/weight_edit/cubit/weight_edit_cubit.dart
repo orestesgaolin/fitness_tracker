@@ -49,17 +49,17 @@ class WeightEditCubit extends Cubit<WeightEditState> {
     }
   }
 
+  void updateNote(String value) {
+    if (state is WeightPopulatedState) {
+      final weight = (state as WeightPopulatedState).weight;
+      final updated = weight.copyWith(note: value.trim());
+      measurementsRepository.updateWeight(weight: updated);
+    }
+  }
+
   @override
   Future<void> close() {
     _listener?.cancel();
     return super.close();
-  }
-
-  void updateNote(String value) {
-    if (state is WeightPopulatedState) {
-      final weight = (state as WeightPopulatedState).weight;
-      final updated = weight.copyWith(note: value);
-      measurementsRepository.updateWeight(weight: updated);
-    }
   }
 }

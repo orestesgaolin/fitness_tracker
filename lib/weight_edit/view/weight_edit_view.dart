@@ -31,6 +31,7 @@ class WeightEditView extends StatelessWidget {
           TextFormField(
             maxLines: 3,
             initialValue: weight.note,
+            textCapitalization: TextCapitalization.sentences,
             onChanged: (value) {
               context.read<WeightEditCubit>().updateNote(value);
             },
