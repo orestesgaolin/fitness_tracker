@@ -87,21 +87,27 @@ class CardDecoration extends StatelessWidget {
     super.key,
     required this.child,
     required this.color,
-    this.padding = const EdgeInsets.all(8),
+    this.margin = const EdgeInsets.all(8),
+    this.padding = EdgeInsets.zero,
   });
 
   final Widget child;
   final Color color;
+  final EdgeInsets margin;
   final EdgeInsets padding;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: padding,
+      padding: margin,
       child: Material(
         color: color,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: child,
+        clipBehavior: Clip.antiAlias,
+        child: Padding(
+          padding: padding,
+          child: child,
+        ),
       ),
     );
   }
