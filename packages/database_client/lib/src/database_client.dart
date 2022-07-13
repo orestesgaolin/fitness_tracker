@@ -67,28 +67,22 @@ class DatabaseClient extends _$DatabaseClient {
     return query.watch();
   }
 
+  Future<int> updateWeight(WeightEntry entry) {
+    return (update(weightEntryModel)..where((tbl) => tbl.id.equals(entry.id)))
+        .write(entry);
+  }
+
   Future<int> saveWeight(
     double value,
     DateTime timestamp, {
     int? id,
   }) async {
-    if (id != null) {
-      return (update(weightEntryModel)..where((tbl) => tbl.id.equals(id)))
-          .write(
-        WeightEntryModelCompanion(
-          id: Value(id),
-          value: Value(value),
-          timestamp: Value(timestamp),
-        ),
-      );
-    } else {
-      return into(weightEntryModel).insert(
-        WeightEntryModelCompanion(
-          value: Value(value),
-          timestamp: Value(timestamp),
-        ),
-      );
-    }
+    return into(weightEntryModel).insert(
+      WeightEntryModelCompanion(
+        value: Value(value),
+        timestamp: Value(timestamp),
+      ),
+    );
   }
 
   Future<int> deleteWeight({required int id}) {

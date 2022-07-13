@@ -37,4 +37,20 @@ class MeasurementsRepository {
   void deleteWeight({required int id}) {
     databaseClient.deleteWeight(id: id);
   }
+
+  Stream<Weight> getWeight(int id) {
+    return databaseClient.weightEntry(id: id).map(Weight.fromDatabase);
+  }
+
+  Future<void> updateWeight({required Weight weight}) async {
+    await databaseClient.updateWeight(
+      WeightEntry(
+        id: weight.id!,
+        value: weight.value,
+        timestamp: weight.timestamp,
+        created: weight.created ?? DateTime.now(),
+        note: weight.note,
+      ),
+    );
+  }
 }
