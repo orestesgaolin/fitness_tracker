@@ -1,4 +1,5 @@
 import 'package:app_ui/app_ui.dart';
+import 'package:fitness/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -119,28 +120,21 @@ class _WeightSelectionLayoutState extends State<WeightSelectionLayout> {
           child: Row(
             children: [
               Expanded(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Theme.of(context).colorScheme.tertiary,
-                  ),
+                child: AppButton.destructive(
+                  theme: Theme.of(context),
                   onPressed: () {
                     Navigator.maybePop(context);
                   },
-                  child: Text(
-                    MaterialLocalizations.of(context).cancelButtonLabel,
-                  ),
+                  child: Text(context.l10n.cancel),
                 ),
               ),
               const Gap(8),
               Expanded(
-                child: ElevatedButton(
+                child: AppButton(
                   onPressed: () {
                     widget.onSubmitted(currentValue, dateTime);
-                    Navigator.maybePop(context);
                   },
-                  child: Text(
-                    MaterialLocalizations.of(context).saveButtonLabel,
-                  ),
+                  child: Text(context.l10n.save),
                 ),
               ),
             ],

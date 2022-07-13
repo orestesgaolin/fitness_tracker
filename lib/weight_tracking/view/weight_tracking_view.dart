@@ -1,6 +1,8 @@
 import 'package:app_ui/app_ui.dart';
 import 'package:fitness/l10n/l10n.dart';
+import 'package:fitness/weight_edit/weight_edit.dart';
 import 'package:fitness/weight_tracking/weight_tracking.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,7 +20,21 @@ class WeightTrackingView extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 8),
         child: Column(
           children: [
-            JumboLabel(l10n.bodyWeight),
+            Stack(
+              children: [
+                Center(child: JumboLabel(l10n.bodyWeight)),
+                Positioned(
+                  right: 0,
+                  child: Text(
+                    'state: weights: ${state.weights.length}\n'
+                    'averages: ${state.averageWeights.length}\n'
+                    'timeRange: ${state.timeRange}\n',
+                    style: const TextStyle(fontSize: 10),
+                    textAlign: TextAlign.right,
+                  ),
+                ),
+              ],
+            ),
             CardDecoration(
               color: Theme.of(context).colorScheme.primaryContainer,
               padding: const EdgeInsets.symmetric(vertical: 4),
@@ -31,6 +47,7 @@ class WeightTrackingView extends StatelessWidget {
               ),
             ),
             const TimeRangeSelector(),
+            const Gap(8),
             const Divider(height: 1),
             Expanded(
               child: ListView.builder(
@@ -39,20 +56,21 @@ class WeightTrackingView extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final weight = state.weights[index];
                   final year =
-                      weight.timestamp.year != DateTime.now().year ? '/y' : '';
+                      weight.timestamp.year != DateTime.now().year ? ', y' : '';
                   return ListTile(
+                    onTap: () {
+                      AppBottomSheet.present<void>(
+                        context,
+                        child: WeightEditPage.weight(
+                          weight: weight,
+                        ),
+                      );
+                    },
                     title: Text('${weight.value} kg'),
                     subtitle: Text(
-                      DateFormat('E, M/d$year').format(weight.timestamp),
+                      DateFormat('E, MMM d$year').format(weight.timestamp),
                     ),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete_outline),
-                      onPressed: () {
-                        context
-                            .read<WeightTrackingCubit>()
-                            .deleteEntry(weight.id!);
-                      },
-                    ),
+                    trailing: const Icon(Icons.chevron_right_rounded),
                   );
                 },
               ),

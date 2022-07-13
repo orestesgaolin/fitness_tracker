@@ -26,6 +26,7 @@ class WeightSelectionPage extends StatelessWidget {
               context
                   .read<WeightTrackingCubit>()
                   .addWeight(value, timestamp: dateTime);
+              Navigator.of(context).maybePop();
             },
           );
         },
