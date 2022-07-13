@@ -27,5 +27,10 @@
     "notifications": "Notifications",
     "light": "Light",
     "dark": "Dark",
-    "system": "System"
+    "system": "System",
+    "edit": "Edit",
+    "notes": "Notes",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete"
 }
