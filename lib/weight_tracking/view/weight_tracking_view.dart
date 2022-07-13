@@ -15,34 +15,35 @@ class WeightTrackingView extends StatelessWidget {
     final l10n = context.l10n;
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.symmetric(horizontal: 8),
         child: Column(
           children: [
             JumboLabel(l10n.bodyWeight),
             CardDecoration(
               color: Theme.of(context).colorScheme.primaryContainer,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: SizedBox(
-                  height: 240,
-                  child: WeightChart(
-                    weights: state.weights,
-                    averageWeights: state.averageWeights,
-                  ),
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: SizedBox(
+                height: 240,
+                child: WeightChart(
+                  weights: state.weights,
+                  averageWeights: state.averageWeights,
                 ),
               ),
             ),
             const TimeRangeSelector(),
+            const Divider(height: 1),
             Expanded(
               child: ListView.builder(
                 padding: const EdgeInsets.only(bottom: 150),
                 itemCount: state.weights.length,
                 itemBuilder: (context, index) {
                   final weight = state.weights[index];
+                  final year =
+                      weight.timestamp.year != DateTime.now().year ? '/y' : '';
                   return ListTile(
                     title: Text('${weight.value} kg'),
                     subtitle: Text(
-                      DateFormat('E, M/d').format(weight.timestamp),
+                      DateFormat('E, M/d$year').format(weight.timestamp),
                     ),
                     trailing: IconButton(
                       icon: const Icon(Icons.delete_outline),
