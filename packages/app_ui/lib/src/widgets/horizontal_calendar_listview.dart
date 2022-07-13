@@ -250,6 +250,7 @@ class ScrollCalendarTile extends StatelessWidget {
         shape: StadiumBorder(
           side: BorderSide(color: borderColor),
         ),
+        clipBehavior: Clip.antiAlias,
         child: InkWell(
           onTap: onTap,
           child: Padding(
