@@ -30,13 +30,22 @@ class WeightChart extends StatelessWidget {
     final labelStyle = Theme.of(context).textTheme.caption?.copyWith(
           color: Theme.of(context).colorScheme.onBackground.withOpacity(0.38),
         );
+    final intervalType = timeSpan.inDays > 30
+        ? timeSpan.inDays > 365
+            ? DateTimeIntervalType.years
+            : DateTimeIntervalType.months
+        : DateTimeIntervalType.days;
+    final interval = timeSpan.inDays > 30
+        ? timeSpan.inDays > 365
+            ? 1.0
+            : 1.0
+        : 2.0;
     return SfCartesianChart(
       key: UniqueKey(),
       legend: Legend(isVisible: false),
       plotAreaBorderWidth: 0,
       margin: EdgeInsets.zero,
       primaryYAxis: NumericAxis(
-        // opposedPosition: true,
         isVisible: true,
         tickPosition: TickPosition.inside,
         edgeLabelPlacement: EdgeLabelPlacement.hide,
@@ -57,6 +66,7 @@ class WeightChart extends StatelessWidget {
         majorTickLines: const MajorTickLines(size: 0),
         labelStyle: labelStyle,
         borderWidth: 0,
+        decimalPlaces: 1,
       ),
       primaryXAxis: DateTimeAxis(
         axisLine: const AxisLine(
@@ -65,7 +75,7 @@ class WeightChart extends StatelessWidget {
         ),
         minorGridLines: const MinorGridLines(width: 0),
         majorGridLines: const MajorGridLines(width: 0),
-        majorTickLines: const MajorTickLines(size: 0),
+        majorTickLines: const MajorTickLines(size: 4),
         labelStyle: labelStyle,
         rangePadding: ChartRangePadding.normal,
         maximum: weights.isNotEmpty
@@ -74,6 +84,8 @@ class WeightChart extends StatelessWidget {
         labelIntersectAction: AxisLabelIntersectAction.hide,
         edgeLabelPlacement: EdgeLabelPlacement.hide,
         borderWidth: 0,
+        interval: interval,
+        intervalType: intervalType,
       ),
       series: [
         SplineAreaSeries<Weight, DateTime>(
