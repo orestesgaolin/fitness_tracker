@@ -15,6 +15,8 @@ class Weight extends Equatable {
     this.value,
     this.timestamp, {
     this.id,
+    this.note = '',
+    this.created,
   });
 
   /// Creates the [Weight] from the database's [WeightEntry]
@@ -23,6 +25,8 @@ class Weight extends Equatable {
           weightEntry.value,
           weightEntry.timestamp,
           id: weightEntry.id,
+          note: weightEntry.note,
+          created: weightEntry.created,
         );
 
   /// Mass in kg
@@ -34,11 +38,38 @@ class Weight extends Equatable {
   /// of the DateTime.
   final DateTime timestamp;
 
+  /// Note related to measurement
+  final String note;
+
+  /// Creation timestamp
+  final DateTime? created;
+
   /// Database id of the entry
   final int? id;
 
+  /// Returns a copy of the entry
+  Weight copyWith({
+    DateTime? timestamp,
+    double? value,
+    String? note,
+  }) {
+    return Weight(
+      value ?? this.value,
+      timestamp ?? this.timestamp,
+      id: id,
+      note: note ?? this.note,
+      created: created,
+    );
+  }
+
   @override
-  List<Object?> get props => [value, timestamp, id];
+  List<Object?> get props => [
+        value,
+        timestamp,
+        id,
+        note,
+        created,
+      ];
 }
 
 /// {@template weight_progress}
