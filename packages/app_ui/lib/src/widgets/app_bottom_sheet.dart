@@ -12,11 +12,15 @@ class AppBottomSheet extends StatelessWidget {
   }) {
     return showBarModalBottomSheet(
       context: context,
-      builder: (context) => Padding(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
+      builder: (context) => GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: AppBottomSheet(child: child),
         ),
-        child: AppBottomSheet(child: child),
       ),
     );
   }
