@@ -12,11 +12,13 @@ class WeightEntry extends DataClass implements Insertable<WeightEntry> {
   final double value;
   final DateTime timestamp;
   final DateTime created;
+  final String note;
   WeightEntry(
       {required this.id,
       required this.value,
       required this.timestamp,
-      required this.created});
+      required this.created,
+      required this.note});
   factory WeightEntry.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return WeightEntry(
@@ -28,6 +30,8 @@ class WeightEntry extends DataClass implements Insertable<WeightEntry> {
           .mapFromDatabaseResponse(data['${effectivePrefix}timestamp'])!,
       created: const DateTimeType()
           .mapFromDatabaseResponse(data['${effectivePrefix}created'])!,
+      note: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}note'])!,
     );
   }
   @override
@@ -37,6 +41,7 @@ class WeightEntry extends DataClass implements Insertable<WeightEntry> {
     map['value'] = Variable<double>(value);
     map['timestamp'] = Variable<DateTime>(timestamp);
     map['created'] = Variable<DateTime>(created);
+    map['note'] = Variable<String>(note);
     return map;
   }
 
@@ -46,6 +51,7 @@ class WeightEntry extends DataClass implements Insertable<WeightEntry> {
       value: Value(value),
       timestamp: Value(timestamp),
       created: Value(created),
+      note: Value(note),
     );
   }
 
@@ -57,6 +63,7 @@ class WeightEntry extends DataClass implements Insertable<WeightEntry> {
       value: serializer.fromJson<double>(json['value']),
       timestamp: serializer.fromJson<DateTime>(json['timestamp']),
       created: serializer.fromJson<DateTime>(json['created']),
+      note: serializer.fromJson<String>(json['note']),
     );
   }
   @override
@@ -67,16 +74,22 @@ class WeightEntry extends DataClass implements Insertable<WeightEntry> {
       'value': serializer.toJson<double>(value),
       'timestamp': serializer.toJson<DateTime>(timestamp),
       'created': serializer.toJson<DateTime>(created),
+      'note': serializer.toJson<String>(note),
     };
   }
 
   WeightEntry copyWith(
-          {int? id, double? value, DateTime? timestamp, DateTime? created}) =>
+          {int? id,
+          double? value,
+          DateTime? timestamp,
+          DateTime? created,
+          String? note}) =>
       WeightEntry(
         id: id ?? this.id,
         value: value ?? this.value,
         timestamp: timestamp ?? this.timestamp,
         created: created ?? this.created,
+        note: note ?? this.note,
       );
   @override
   String toString() {
@@ -84,13 +97,14 @@ class WeightEntry extends DataClass implements Insertable<WeightEntry> {
           ..write('id: $id, ')
           ..write('value: $value, ')
           ..write('timestamp: $timestamp, ')
-          ..write('created: $created')
+          ..write('created: $created, ')
+          ..write('note: $note')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, value, timestamp, created);
+  int get hashCode => Object.hash(id, value, timestamp, created, note);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -98,7 +112,8 @@ class WeightEntry extends DataClass implements Insertable<WeightEntry> {
           other.id == this.id &&
           other.value == this.value &&
           other.timestamp == this.timestamp &&
-          other.created == this.created);
+          other.created == this.created &&
+          other.note == this.note);
 }
 
 class WeightEntryModelCompanion extends UpdateCompanion<WeightEntry> {
@@ -106,17 +121,20 @@ class WeightEntryModelCompanion extends UpdateCompanion<WeightEntry> {
   final Value<double> value;
   final Value<DateTime> timestamp;
   final Value<DateTime> created;
+  final Value<String> note;
   const WeightEntryModelCompanion({
     this.id = const Value.absent(),
     this.value = const Value.absent(),
     this.timestamp = const Value.absent(),
     this.created = const Value.absent(),
+    this.note = const Value.absent(),
   });
   WeightEntryModelCompanion.insert({
     this.id = const Value.absent(),
     required double value,
     required DateTime timestamp,
     this.created = const Value.absent(),
+    this.note = const Value.absent(),
   })  : value = Value(value),
         timestamp = Value(timestamp);
   static Insertable<WeightEntry> custom({
@@ -124,12 +142,14 @@ class WeightEntryModelCompanion extends UpdateCompanion<WeightEntry> {
     Expression<double>? value,
     Expression<DateTime>? timestamp,
     Expression<DateTime>? created,
+    Expression<String>? note,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (value != null) 'value': value,
       if (timestamp != null) 'timestamp': timestamp,
       if (created != null) 'created': created,
+      if (note != null) 'note': note,
     });
   }
 
@@ -137,12 +157,14 @@ class WeightEntryModelCompanion extends UpdateCompanion<WeightEntry> {
       {Value<int>? id,
       Value<double>? value,
       Value<DateTime>? timestamp,
-      Value<DateTime>? created}) {
+      Value<DateTime>? created,
+      Value<String>? note}) {
     return WeightEntryModelCompanion(
       id: id ?? this.id,
       value: value ?? this.value,
       timestamp: timestamp ?? this.timestamp,
       created: created ?? this.created,
+      note: note ?? this.note,
     );
   }
 
@@ -161,6 +183,9 @@ class WeightEntryModelCompanion extends UpdateCompanion<WeightEntry> {
     if (created.present) {
       map['created'] = Variable<DateTime>(created.value);
     }
+    if (note.present) {
+      map['note'] = Variable<String>(note.value);
+    }
     return map;
   }
 
@@ -170,7 +195,8 @@ class WeightEntryModelCompanion extends UpdateCompanion<WeightEntry> {
           ..write('id: $id, ')
           ..write('value: $value, ')
           ..write('timestamp: $timestamp, ')
-          ..write('created: $created')
+          ..write('created: $created, ')
+          ..write('note: $note')
           ..write(')'))
         .toString();
   }
@@ -206,8 +232,15 @@ class $WeightEntryModelTable extends WeightEntryModel
       type: const IntType(),
       requiredDuringInsert: false,
       defaultValue: currentDateAndTime);
+  final VerificationMeta _noteMeta = const VerificationMeta('note');
   @override
-  List<GeneratedColumn> get $columns => [id, value, timestamp, created];
+  late final GeneratedColumn<String?> note = GeneratedColumn<String?>(
+      'note', aliasedName, false,
+      type: const StringType(),
+      requiredDuringInsert: false,
+      defaultValue: const Constant(''));
+  @override
+  List<GeneratedColumn> get $columns => [id, value, timestamp, created, note];
   @override
   String get aliasedName => _alias ?? 'weight_entry_model';
   @override
@@ -235,6 +268,10 @@ class $WeightEntryModelTable extends WeightEntryModel
     if (data.containsKey('created')) {
       context.handle(_createdMeta,
           created.isAcceptableOrUnknown(data['created']!, _createdMeta));
+    }
+    if (data.containsKey('note')) {
+      context.handle(
+          _noteMeta, note.isAcceptableOrUnknown(data['note']!, _noteMeta));
     }
     return context;
   }
@@ -429,15 +466,300 @@ class $SettingsEntryModelTable extends SettingsEntryModel
   }
 }
 
+class ExerciseEntry extends DataClass implements Insertable<ExerciseEntry> {
+  final int id;
+  final String name;
+  final DateTime timestamp;
+  final DateTime created;
+  final String note;
+  ExerciseEntry(
+      {required this.id,
+      required this.name,
+      required this.timestamp,
+      required this.created,
+      required this.note});
+  factory ExerciseEntry.fromData(Map<String, dynamic> data, {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return ExerciseEntry(
+      id: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
+      name: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
+      timestamp: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}timestamp'])!,
+      created: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}created'])!,
+      note: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}note'])!,
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['name'] = Variable<String>(name);
+    map['timestamp'] = Variable<DateTime>(timestamp);
+    map['created'] = Variable<DateTime>(created);
+    map['note'] = Variable<String>(note);
+    return map;
+  }
+
+  ExerciseEntryModelCompanion toCompanion(bool nullToAbsent) {
+    return ExerciseEntryModelCompanion(
+      id: Value(id),
+      name: Value(name),
+      timestamp: Value(timestamp),
+      created: Value(created),
+      note: Value(note),
+    );
+  }
+
+  factory ExerciseEntry.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ExerciseEntry(
+      id: serializer.fromJson<int>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
+      timestamp: serializer.fromJson<DateTime>(json['timestamp']),
+      created: serializer.fromJson<DateTime>(json['created']),
+      note: serializer.fromJson<String>(json['note']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'name': serializer.toJson<String>(name),
+      'timestamp': serializer.toJson<DateTime>(timestamp),
+      'created': serializer.toJson<DateTime>(created),
+      'note': serializer.toJson<String>(note),
+    };
+  }
+
+  ExerciseEntry copyWith(
+          {int? id,
+          String? name,
+          DateTime? timestamp,
+          DateTime? created,
+          String? note}) =>
+      ExerciseEntry(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        timestamp: timestamp ?? this.timestamp,
+        created: created ?? this.created,
+        note: note ?? this.note,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('ExerciseEntry(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('timestamp: $timestamp, ')
+          ..write('created: $created, ')
+          ..write('note: $note')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, name, timestamp, created, note);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ExerciseEntry &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.timestamp == this.timestamp &&
+          other.created == this.created &&
+          other.note == this.note);
+}
+
+class ExerciseEntryModelCompanion extends UpdateCompanion<ExerciseEntry> {
+  final Value<int> id;
+  final Value<String> name;
+  final Value<DateTime> timestamp;
+  final Value<DateTime> created;
+  final Value<String> note;
+  const ExerciseEntryModelCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+    this.timestamp = const Value.absent(),
+    this.created = const Value.absent(),
+    this.note = const Value.absent(),
+  });
+  ExerciseEntryModelCompanion.insert({
+    this.id = const Value.absent(),
+    required String name,
+    required DateTime timestamp,
+    this.created = const Value.absent(),
+    this.note = const Value.absent(),
+  })  : name = Value(name),
+        timestamp = Value(timestamp);
+  static Insertable<ExerciseEntry> custom({
+    Expression<int>? id,
+    Expression<String>? name,
+    Expression<DateTime>? timestamp,
+    Expression<DateTime>? created,
+    Expression<String>? note,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (timestamp != null) 'timestamp': timestamp,
+      if (created != null) 'created': created,
+      if (note != null) 'note': note,
+    });
+  }
+
+  ExerciseEntryModelCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? name,
+      Value<DateTime>? timestamp,
+      Value<DateTime>? created,
+      Value<String>? note}) {
+    return ExerciseEntryModelCompanion(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      timestamp: timestamp ?? this.timestamp,
+      created: created ?? this.created,
+      note: note ?? this.note,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (timestamp.present) {
+      map['timestamp'] = Variable<DateTime>(timestamp.value);
+    }
+    if (created.present) {
+      map['created'] = Variable<DateTime>(created.value);
+    }
+    if (note.present) {
+      map['note'] = Variable<String>(note.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ExerciseEntryModelCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('timestamp: $timestamp, ')
+          ..write('created: $created, ')
+          ..write('note: $note')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ExerciseEntryModelTable extends ExerciseEntryModel
+    with TableInfo<$ExerciseEntryModelTable, ExerciseEntry> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ExerciseEntryModelTable(this.attachedDatabase, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+      'id', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
+  final VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
+      'name', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _timestampMeta = const VerificationMeta('timestamp');
+  @override
+  late final GeneratedColumn<DateTime?> timestamp = GeneratedColumn<DateTime?>(
+      'timestamp', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
+  final VerificationMeta _createdMeta = const VerificationMeta('created');
+  @override
+  late final GeneratedColumn<DateTime?> created = GeneratedColumn<DateTime?>(
+      'created', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
+  final VerificationMeta _noteMeta = const VerificationMeta('note');
+  @override
+  late final GeneratedColumn<String?> note = GeneratedColumn<String?>(
+      'note', aliasedName, false,
+      type: const StringType(),
+      requiredDuringInsert: false,
+      defaultValue: const Constant(''));
+  @override
+  List<GeneratedColumn> get $columns => [id, name, timestamp, created, note];
+  @override
+  String get aliasedName => _alias ?? 'exercise_entry_model';
+  @override
+  String get actualTableName => 'exercise_entry_model';
+  @override
+  VerificationContext validateIntegrity(Insertable<ExerciseEntry> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('timestamp')) {
+      context.handle(_timestampMeta,
+          timestamp.isAcceptableOrUnknown(data['timestamp']!, _timestampMeta));
+    } else if (isInserting) {
+      context.missing(_timestampMeta);
+    }
+    if (data.containsKey('created')) {
+      context.handle(_createdMeta,
+          created.isAcceptableOrUnknown(data['created']!, _createdMeta));
+    }
+    if (data.containsKey('note')) {
+      context.handle(
+          _noteMeta, note.isAcceptableOrUnknown(data['note']!, _noteMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ExerciseEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return ExerciseEntry.fromData(data,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $ExerciseEntryModelTable createAlias(String alias) {
+    return $ExerciseEntryModelTable(attachedDatabase, alias);
+  }
+}
+
 abstract class _$DatabaseClient extends GeneratedDatabase {
   _$DatabaseClient(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   late final $WeightEntryModelTable weightEntryModel =
       $WeightEntryModelTable(this);
   late final $SettingsEntryModelTable settingsEntryModel =
       $SettingsEntryModelTable(this);
+  late final $ExerciseEntryModelTable exerciseEntryModel =
+      $ExerciseEntryModelTable(this);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [weightEntryModel, settingsEntryModel];
+      [weightEntryModel, settingsEntryModel, exerciseEntryModel];
 }

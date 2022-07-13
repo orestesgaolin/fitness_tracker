@@ -10,13 +10,19 @@ part 'database_client.g.dart';
 /// {@template database_client}
 /// Package connecting to the local database
 /// {@endtemplate}
-@DriftDatabase(tables: [WeightEntryModel, SettingsEntryModel])
+@DriftDatabase(
+  tables: [
+    WeightEntryModel,
+    SettingsEntryModel,
+    ExerciseEntryModel,
+  ],
+)
 class DatabaseClient extends _$DatabaseClient {
   /// {@macro database_client}
   DatabaseClient(File file) : super(NativeDatabase(file));
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration {
@@ -28,6 +34,10 @@ class DatabaseClient extends _$DatabaseClient {
         if (from < 2) {
           // we added the [SettingsEntryModel]
           await m.createTable(settingsEntryModel);
+        }
+        if (from < 3) {
+          await m.addColumn(weightEntryModel, weightEntryModel.note);
+          await m.createTable(exerciseEntryModel);
         }
       },
     );
@@ -57,17 +67,37 @@ class DatabaseClient extends _$DatabaseClient {
     return query.watch();
   }
 
-  Future<int> saveWeight(double value, DateTime timestamp) async {
-    return into(weightEntryModel).insert(
-      WeightEntryModelCompanion(
-        value: Value(value),
-        timestamp: Value(timestamp),
-      ),
-    );
+  Future<int> saveWeight(
+    double value,
+    DateTime timestamp, {
+    int? id,
+  }) async {
+    if (id != null) {
+      return (update(weightEntryModel)..where((tbl) => tbl.id.equals(id)))
+          .write(
+        WeightEntryModelCompanion(
+          id: Value(id),
+          value: Value(value),
+          timestamp: Value(timestamp),
+        ),
+      );
+    } else {
+      return into(weightEntryModel).insert(
+        WeightEntryModelCompanion(
+          value: Value(value),
+          timestamp: Value(timestamp),
+        ),
+      );
+    }
   }
 
   Future<int> deleteWeight({required int id}) {
     return (delete(weightEntryModel)..where((tbl) => tbl.id.equals(id))).go();
+  }
+
+  Stream<WeightEntry> weightEntry({required int id}) {
+    return (select(weightEntryModel)..where((tbl) => tbl.id.equals(id)))
+        .watchSingle();
   }
 
   Stream<Map<String, String>> settingsEntries() {
@@ -93,6 +123,7 @@ class WeightEntryModel extends Table {
   RealColumn get value => real()();
   DateTimeColumn get timestamp => dateTime()();
   DateTimeColumn get created => dateTime().withDefault(currentDateAndTime)();
+  TextColumn get note => text().withDefault(const Constant(''))();
 }
 
 @DataClassName('SettingsEntry')
@@ -102,4 +133,13 @@ class SettingsEntryModel extends Table {
 
   @override
   Set<Column> get primaryKey => {key};
+}
+
+@DataClassName('ExerciseEntry')
+class ExerciseEntryModel extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get name => text()();
+  DateTimeColumn get timestamp => dateTime()();
+  DateTimeColumn get created => dateTime().withDefault(currentDateAndTime)();
+  TextColumn get note => text().withDefault(const Constant(''))();
 }
