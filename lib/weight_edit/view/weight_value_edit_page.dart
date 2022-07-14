@@ -18,6 +18,5 @@ class WeightValueEditPage extends StatelessWidget {
         Navigator.of(context).pop(value);
       },
     );
-    ;
   }
 }

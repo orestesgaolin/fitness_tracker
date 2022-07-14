@@ -2,7 +2,6 @@ import 'package:app_ui/app_ui.dart';
 import 'package:fitness/l10n/l10n.dart';
 import 'package:fitness/weight_edit/weight_edit.dart';
 import 'package:fitness/weight_tracking/weight_tracking.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
