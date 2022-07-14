@@ -119,7 +119,7 @@ List<Weight> averageWeights(List<Weight> weights) {
   final timeSpan = Duration(milliseconds: maxTimestamp - minTimestamp);
 
   final results = <Weight>[];
-// Start with the first entry
+  // Start with the first entry
   results.add(Weight(weights.first.value, minDate));
 
   if (timeSpan > const Duration(days: 30)) {

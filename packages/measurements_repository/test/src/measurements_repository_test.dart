@@ -4,22 +4,22 @@ import 'package:measurements_repository/measurements_repository.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
-class MockDatabaseClient extends Mock implements DatabaseClient {}
+class MockWeightResource extends Mock implements WeightResource {}
 
 void main() {
   group('MeasurementsRepository', () {
-    late DatabaseClient databaseClient;
+    late WeightResource weightResource;
 
     setUp(() {
-      databaseClient = MockDatabaseClient();
-      when(() => databaseClient.weightEntries())
+      weightResource = MockWeightResource();
+      when(() => weightResource.weightEntries())
           .thenAnswer((_) => Stream<List<WeightEntry>>.empty());
-      when(() => databaseClient.saveWeight(any(), any()))
+      when(() => weightResource.saveWeight(any(), any()))
           .thenAnswer((_) => Future.value(1));
     });
 
     test('can be instantiated', () {
-      expect(MeasurementsRepository(databaseClient), isNotNull);
+      expect(MeasurementsRepository(weightResource), isNotNull);
     });
   });
 }

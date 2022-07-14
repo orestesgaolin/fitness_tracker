@@ -2,12 +2,23 @@
 
 import 'dart:io';
 
+import 'package:database_client/database_client.dart';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 
 part 'database_client.g.dart';
 
-/// {@template database_client}
+class DatabaseClient {
+  DatabaseClient(File file) : _db = DatabaseImplementation(file);
+
+  final DatabaseImplementation _db;
+
+  WeightResource get weightResource => WeightResource(_db);
+
+  SettingsResource get settingsResource => SettingsResource(_db);
+}
+
+/// {@template database_implementation}
 /// Package connecting to the local database
 /// {@endtemplate}
 @DriftDatabase(
@@ -15,14 +26,15 @@ part 'database_client.g.dart';
     WeightEntryModel,
     SettingsEntryModel,
     ExerciseEntryModel,
+    PedometerEntryModel,
   ],
 )
-class DatabaseClient extends _$DatabaseClient {
-  /// {@macro database_client}
-  DatabaseClient(File file) : super(NativeDatabase(file));
+class DatabaseImplementation extends _$DatabaseImplementation {
+  /// {@macro database_implementation}
+  DatabaseImplementation(File file) : super(NativeDatabase(file));
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration {
@@ -39,75 +51,11 @@ class DatabaseClient extends _$DatabaseClient {
           await m.addColumn(weightEntryModel, weightEntryModel.note);
           await m.createTable(exerciseEntryModel);
         }
+        if (from < 4) {
+          await m.createTable(pedometerEntryModel);
+        }
       },
     );
-  }
-
-  Stream<List<WeightEntry>> weightEntries({
-    DateTime? startDate,
-    DateTime? endDate,
-    int limit = 0,
-    bool descending = false,
-  }) {
-    final mode = descending ? OrderingMode.desc : OrderingMode.asc;
-    final query = select(weightEntryModel);
-
-    if (startDate != null && endDate != null) {
-      query.where((t) => t.timestamp.isBetweenValues(startDate, endDate));
-    } else if (startDate != null) {
-      query.where((t) => t.timestamp.isBiggerOrEqualValue(startDate));
-    } else if (endDate != null) {
-      query.where((t) => t.timestamp.isSmallerOrEqualValue(startDate));
-    }
-
-    query.orderBy([(t) => OrderingTerm(expression: t.timestamp, mode: mode)]);
-    if (limit != 0) {
-      query.limit(limit);
-    }
-    return query.watch();
-  }
-
-  Future<int> updateWeight(WeightEntry entry) {
-    return (update(weightEntryModel)..where((tbl) => tbl.id.equals(entry.id)))
-        .write(entry);
-  }
-
-  Future<int> saveWeight(
-    double value,
-    DateTime timestamp, {
-    int? id,
-  }) async {
-    return into(weightEntryModel).insert(
-      WeightEntryModelCompanion(
-        value: Value(value),
-        timestamp: Value(timestamp),
-      ),
-    );
-  }
-
-  Future<int> deleteWeight({required int id}) {
-    return (delete(weightEntryModel)..where((tbl) => tbl.id.equals(id))).go();
-  }
-
-  Stream<WeightEntry> weightEntry({required int id}) {
-    return (select(weightEntryModel)..where((tbl) => tbl.id.equals(id)))
-        .watchSingle();
-  }
-
-  Stream<Map<String, String>> settingsEntries() {
-    final query = select(settingsEntryModel);
-
-    return query.watch().map(
-          (event) => {for (final v in event) v.key: v.value},
-        );
-  }
-
-  Future<void> saveSettings(Map<String, String> settings) async {
-    for (final setting in settings.entries) {
-      await into(settingsEntryModel).insertOnConflictUpdate(
-        SettingsEntry(key: setting.key, value: setting.value),
-      );
-    }
   }
 }
 
@@ -136,4 +84,11 @@ class ExerciseEntryModel extends Table {
   DateTimeColumn get timestamp => dateTime()();
   DateTimeColumn get created => dateTime().withDefault(currentDateAndTime)();
   TextColumn get note => text().withDefault(const Constant(''))();
+}
+
+@DataClassName('PedometerEntry')
+class PedometerEntryModel extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  DateTimeColumn get timestamp => dateTime()();
+  IntColumn get value => integer()();
 }

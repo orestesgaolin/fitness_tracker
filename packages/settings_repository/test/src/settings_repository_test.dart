@@ -4,18 +4,18 @@ import 'package:mocktail/mocktail.dart';
 import 'package:settings_repository/settings_repository.dart';
 import 'package:test/test.dart';
 
-class MockDatabaseClient extends Mock implements DatabaseClient {}
+class MockSettingsResource extends Mock implements SettingsResource {}
 
 void main() {
   group('SettingsRepository', () {
-    late DatabaseClient databaseClient;
+    late SettingsResource settingsResource;
 
     setUp(() {
-      databaseClient = MockDatabaseClient();
+      settingsResource = MockSettingsResource();
     });
 
     test('can be instantiated', () {
-      expect(SettingsRepository(databaseClient), isNotNull);
+      expect(SettingsRepository(settingsResource), isNotNull);
     });
   });
 }

@@ -16,8 +16,10 @@ void main() {
     final file = File(path.join(dbFolder.path, 'db.sqlite'));
 
     final databaseClient = DatabaseClient(file);
-    final measurementsRepository = MeasurementsRepository(databaseClient);
-    final settingsRepository = SettingsRepository(databaseClient);
+    final measurementsRepository =
+        MeasurementsRepository(databaseClient.weightResource);
+    final settingsRepository =
+        SettingsRepository(databaseClient.settingsResource);
     final settings = await settingsRepository.settings().first;
     return App(
       initialSettings: settings,

@@ -8,22 +8,22 @@ import 'package:measurements_repository/measurements_repository.dart';
 /// {@endtemplate}
 class MeasurementsRepository {
   /// {@macro measurements_repository}
-  const MeasurementsRepository(this.databaseClient);
+  const MeasurementsRepository(this.weightResource);
 
-  final DatabaseClient databaseClient;
+  final WeightResource weightResource;
 
   Future<void> saveWeight(Weight weight) async {
-    await databaseClient.saveWeight(weight.value, weight.timestamp);
+    await weightResource.saveWeight(weight.value, weight.timestamp);
   }
 
   Stream<List<Weight>> weights({DateTime? startDate, DateTime? endDate}) {
-    return databaseClient
+    return weightResource
         .weightEntries(startDate: startDate, endDate: endDate)
         .map((e) => e.map(Weight.fromDatabase).toList());
   }
 
   Stream<WeightProgress?> latestWeight() {
-    return databaseClient.weightEntries(limit: 2, descending: true).map(
+    return weightResource.weightEntries(limit: 2, descending: true).map(
       (e) {
         if (e.isEmpty) {
           return null;
@@ -35,15 +35,15 @@ class MeasurementsRepository {
   }
 
   void deleteWeight({required int id}) {
-    databaseClient.deleteWeight(id: id);
+    weightResource.deleteWeight(id: id);
   }
 
   Stream<Weight> getWeight(int id) {
-    return databaseClient.weightEntry(id: id).map(Weight.fromDatabase);
+    return weightResource.weightEntry(id: id).map(Weight.fromDatabase);
   }
 
   Future<void> updateWeight({required Weight weight}) async {
-    await databaseClient.updateWeight(
+    await weightResource.updateWeight(
       WeightEntry(
         id: weight.id!,
         value: weight.value,

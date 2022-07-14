@@ -7,12 +7,12 @@ import 'package:database_client/database_client.dart';
 /// {@endtemplate}
 class SettingsRepository {
   /// {@macro settings_repository}
-  const SettingsRepository(this.databaseClient);
+  const SettingsRepository(this.settingsResource);
 
-  final DatabaseClient databaseClient;
+  final SettingsResource settingsResource;
 
   Stream<Settings> settings() {
-    return databaseClient.settingsEntries().map(
+    return settingsResource.settingsEntries().map(
           (event) => Settings(
             themeModeIndex: int.tryParse(event['themeModeIndex'] ?? '0') ?? 0,
           ),
@@ -20,7 +20,7 @@ class SettingsRepository {
   }
 
   Future<void> saveSettings(Settings settings) async {
-    await databaseClient.saveSettings(settings.toMap());
+    await settingsResource.saveSettings(settings.toMap());
   }
 }
 

@@ -749,17 +749,232 @@ class $ExerciseEntryModelTable extends ExerciseEntryModel
   }
 }
 
-abstract class _$DatabaseClient extends GeneratedDatabase {
-  _$DatabaseClient(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
+class PedometerEntry extends DataClass implements Insertable<PedometerEntry> {
+  final int id;
+  final DateTime timestamp;
+  final int value;
+  PedometerEntry(
+      {required this.id, required this.timestamp, required this.value});
+  factory PedometerEntry.fromData(Map<String, dynamic> data, {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return PedometerEntry(
+      id: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
+      timestamp: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}timestamp'])!,
+      value: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}value'])!,
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['timestamp'] = Variable<DateTime>(timestamp);
+    map['value'] = Variable<int>(value);
+    return map;
+  }
+
+  PedometerEntryModelCompanion toCompanion(bool nullToAbsent) {
+    return PedometerEntryModelCompanion(
+      id: Value(id),
+      timestamp: Value(timestamp),
+      value: Value(value),
+    );
+  }
+
+  factory PedometerEntry.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return PedometerEntry(
+      id: serializer.fromJson<int>(json['id']),
+      timestamp: serializer.fromJson<DateTime>(json['timestamp']),
+      value: serializer.fromJson<int>(json['value']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'timestamp': serializer.toJson<DateTime>(timestamp),
+      'value': serializer.toJson<int>(value),
+    };
+  }
+
+  PedometerEntry copyWith({int? id, DateTime? timestamp, int? value}) =>
+      PedometerEntry(
+        id: id ?? this.id,
+        timestamp: timestamp ?? this.timestamp,
+        value: value ?? this.value,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('PedometerEntry(')
+          ..write('id: $id, ')
+          ..write('timestamp: $timestamp, ')
+          ..write('value: $value')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, timestamp, value);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is PedometerEntry &&
+          other.id == this.id &&
+          other.timestamp == this.timestamp &&
+          other.value == this.value);
+}
+
+class PedometerEntryModelCompanion extends UpdateCompanion<PedometerEntry> {
+  final Value<int> id;
+  final Value<DateTime> timestamp;
+  final Value<int> value;
+  const PedometerEntryModelCompanion({
+    this.id = const Value.absent(),
+    this.timestamp = const Value.absent(),
+    this.value = const Value.absent(),
+  });
+  PedometerEntryModelCompanion.insert({
+    this.id = const Value.absent(),
+    required DateTime timestamp,
+    required int value,
+  })  : timestamp = Value(timestamp),
+        value = Value(value);
+  static Insertable<PedometerEntry> custom({
+    Expression<int>? id,
+    Expression<DateTime>? timestamp,
+    Expression<int>? value,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (timestamp != null) 'timestamp': timestamp,
+      if (value != null) 'value': value,
+    });
+  }
+
+  PedometerEntryModelCompanion copyWith(
+      {Value<int>? id, Value<DateTime>? timestamp, Value<int>? value}) {
+    return PedometerEntryModelCompanion(
+      id: id ?? this.id,
+      timestamp: timestamp ?? this.timestamp,
+      value: value ?? this.value,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (timestamp.present) {
+      map['timestamp'] = Variable<DateTime>(timestamp.value);
+    }
+    if (value.present) {
+      map['value'] = Variable<int>(value.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PedometerEntryModelCompanion(')
+          ..write('id: $id, ')
+          ..write('timestamp: $timestamp, ')
+          ..write('value: $value')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $PedometerEntryModelTable extends PedometerEntryModel
+    with TableInfo<$PedometerEntryModelTable, PedometerEntry> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $PedometerEntryModelTable(this.attachedDatabase, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+      'id', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
+  final VerificationMeta _timestampMeta = const VerificationMeta('timestamp');
+  @override
+  late final GeneratedColumn<DateTime?> timestamp = GeneratedColumn<DateTime?>(
+      'timestamp', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
+  final VerificationMeta _valueMeta = const VerificationMeta('value');
+  @override
+  late final GeneratedColumn<int?> value = GeneratedColumn<int?>(
+      'value', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [id, timestamp, value];
+  @override
+  String get aliasedName => _alias ?? 'pedometer_entry_model';
+  @override
+  String get actualTableName => 'pedometer_entry_model';
+  @override
+  VerificationContext validateIntegrity(Insertable<PedometerEntry> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('timestamp')) {
+      context.handle(_timestampMeta,
+          timestamp.isAcceptableOrUnknown(data['timestamp']!, _timestampMeta));
+    } else if (isInserting) {
+      context.missing(_timestampMeta);
+    }
+    if (data.containsKey('value')) {
+      context.handle(
+          _valueMeta, value.isAcceptableOrUnknown(data['value']!, _valueMeta));
+    } else if (isInserting) {
+      context.missing(_valueMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  PedometerEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return PedometerEntry.fromData(data,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $PedometerEntryModelTable createAlias(String alias) {
+    return $PedometerEntryModelTable(attachedDatabase, alias);
+  }
+}
+
+abstract class _$DatabaseImplementation extends GeneratedDatabase {
+  _$DatabaseImplementation(QueryExecutor e)
+      : super(SqlTypeSystem.defaultInstance, e);
   late final $WeightEntryModelTable weightEntryModel =
       $WeightEntryModelTable(this);
   late final $SettingsEntryModelTable settingsEntryModel =
       $SettingsEntryModelTable(this);
   late final $ExerciseEntryModelTable exerciseEntryModel =
       $ExerciseEntryModelTable(this);
+  late final $PedometerEntryModelTable pedometerEntryModel =
+      $PedometerEntryModelTable(this);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [weightEntryModel, settingsEntryModel, exerciseEntryModel];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+        weightEntryModel,
+        settingsEntryModel,
+        exerciseEntryModel,
+        pedometerEntryModel
+      ];
 }
