@@ -1,0 +1,17 @@
+name: permissions_repository
+description: Package accessing the permissions
+version: 1.0.0+1
+publish_to: none
+
+environment:
+  sdk: ">=2.17.0 <3.0.0"
+
+dependencies:
+  equatable: ^2.0.3
+  permission_handler: ^10.0.0
+  rxdart: ^0.27.4
+
+dev_dependencies:
+  mocktail: ^0.3.0
+  test: ^1.19.2
+  very_good_analysis: ^3.0.1
