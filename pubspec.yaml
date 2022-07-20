@@ -10,6 +10,8 @@ dependencies:
   animations: ^2.0.3
   app_ui:
     path: packages/app_ui
+  background_job_repository:
+    path: packages/background_job_repository
   bloc: ^8.0.3
   clock: ^1.1.0
   collection: ^1.16.0
@@ -26,6 +28,8 @@ dependencies:
     path: packages/measurements_repository
   path: ^1.8.1
   path_provider: ^2.0.11
+  permissions_repository:
+    path: packages/permissions_repository
   settings_repository:
     path: packages/settings_repository
   syncfusion_flutter_charts: ^20.2.36

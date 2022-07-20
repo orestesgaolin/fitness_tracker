@@ -1,10 +1,12 @@
 import 'package:app_ui/app_ui.dart';
+import 'package:background_job_repository/background_job_repository.dart';
 import 'package:fitness/home/home.dart';
 import 'package:fitness/l10n/l10n.dart';
 import 'package:fitness/settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:measurements_repository/measurements_repository.dart';
+import 'package:permissions_repository/permissions_repository.dart';
 import 'package:settings_repository/settings_repository.dart';
 
 class App extends StatelessWidget {
@@ -13,11 +15,15 @@ class App extends StatelessWidget {
     required this.initialSettings,
     required this.measurementsRepository,
     required this.settingsRepository,
+    required this.permissionsRepository,
+    required this.backgroundJobRepository,
   });
 
   final Settings initialSettings;
   final MeasurementsRepository measurementsRepository;
   final SettingsRepository settingsRepository;
+  final PermissionsRepository permissionsRepository;
+  final BackgroundJobRepository backgroundJobRepository;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +31,8 @@ class App extends StatelessWidget {
       providers: [
         RepositoryProvider.value(value: measurementsRepository),
         RepositoryProvider.value(value: settingsRepository),
+        RepositoryProvider.value(value: permissionsRepository),
+        RepositoryProvider.value(value: backgroundJobRepository),
       ],
       child: BlocProvider(
         create: (context) =>

@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:database_client/database_client.dart';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
+import 'package:path/path.dart' as path;
 
 part 'database_client.g.dart';
 
@@ -16,6 +17,17 @@ class DatabaseClient {
   WeightResource get weightResource => WeightResource(_db);
 
   SettingsResource get settingsResource => SettingsResource(_db);
+
+  StepsResource get stepsResource => StepsResource(_db);
+
+  static const defaultDatabaseName = 'db.sqlite';
+
+  static File defaultDatabaseFile(String appPath) => File(
+        path.join(
+          appPath,
+          DatabaseClient.defaultDatabaseName,
+        ),
+      );
 }
 
 /// {@template database_implementation}
