@@ -2,6 +2,7 @@ import 'package:app_ui/app_ui.dart';
 import 'package:fitness/dashboard/dashboard.dart';
 import 'package:fitness/home/home.dart';
 import 'package:fitness/l10n/l10n.dart';
+import 'package:fitness/steps/steps.dart';
 import 'package:fitness/weight_tracking/weight_tracking.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -46,11 +47,21 @@ class DashboardView extends StatelessWidget {
                       context.read<HomeCubit>().setPage(HomeSelection.activity);
                     },
                   ),
-                  DashboardCard(
-                    title: l10n.steps,
-                    subtitle: l10n.stepsCount(3745),
-                    emoji: '🚶‍♂️',
-                    color: Theme.of(context).colorScheme.primaryContainer,
+                  StepsBuilder(
+                    builder: (context, steps, permissions) =>
+                        TweenAnimationBuilder<int>(
+                      duration: const Duration(milliseconds: 400),
+                      curve: Curves.decelerate,
+                      tween: IntTween(begin: 0, end: steps),
+                      builder: (context, value, child) {
+                        return DashboardCard(
+                          title: l10n.steps,
+                          subtitle: l10n.stepsCount(value),
+                          emoji: '🚶‍♂️',
+                          color: Theme.of(context).colorScheme.primaryContainer,
+                        );
+                      },
+                    ),
                   ),
                 ],
               ),
