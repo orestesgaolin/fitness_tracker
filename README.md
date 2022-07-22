@@ -18,12 +18,13 @@ Design inspired by [MohammadHadi Ahmadian for Obtic](https://dribbble.com/shots/
 
 - [x] Tracking body weight
 - [x] Displaying body weight as a nice looking chart
+- [ ] Tracking steps as background job
 - [ ] Tracking exercises and notes
 - [ ] Planning exercise sessions
 - [ ] Notifications and reminders
 - [ ] Import and export of data
-- [ ] Integration with Google Fit/Apple HealthKit/Samsung Health
-- [ ] Online sync with desired provider (e.g. Dropbox)
+- [ ] Integration with Google Fit/Apple HealthKit/Samsung Health, maybe Fitatu
+- [ ] Online sync with desired provider (e.g. Dropbox, OneDrive)
 
 # Contributing and development
 
@@ -49,6 +50,12 @@ $ flutter run --flavor production --target lib/main.dart
 ```
 
 _\*Fitness works on iOS, Android, Web, and Windows._
+
+## Packages structure
+
+There are several local packages available in the `packages` directory. Their dependency structure is visible below:
+
+![Dependency structure generated with pubviz](./docs/structure.png)
 
 ---
 
