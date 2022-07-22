@@ -49,7 +49,7 @@ $ flutter run --flavor staging --target lib/main.dart
 $ flutter run --flavor production --target lib/main.dart
 ```
 
-_\*Fitness works on iOS, Android, Web, and Windows._
+_\*Fitness works on iOS and Android._
 
 ## Packages structure
 
