@@ -134,6 +134,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.2"
+  csv:
+    dependency: transitive
+    description:
+      name: csv
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.0.1"
   database_client:
     dependency: "direct main"
     description:
@@ -190,6 +197,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.1.2"
+  file_picker:
+    dependency: transitive
+    description:
+      name: file_picker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.0.0"
+  files_repository:
+    dependency: "direct main"
+    description:
+      path: "packages/files_repository"
+      relative: true
+    source: path
+    version: "1.0.0+1"
   flex_color_scheme:
     dependency: transitive
     description:
@@ -235,8 +256,20 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_plugin_android_lifecycle:
+    dependency: transitive
+    description:
+      name: flutter_plugin_android_lifecycle
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.7"
   flutter_test:
     dependency: "direct dev"
+    description: flutter
+    source: sdk
+    version: "0.0.0"
+  flutter_web_plugins:
+    dependency: transitive
     description: flutter
     source: sdk
     version: "0.0.0"
@@ -506,6 +539,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.2"
+  pluto_grid:
+    dependency: "direct main"
+    description:
+      name: pluto_grid
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.0.4"
   pool:
     dependency: transitive
     description:
@@ -540,7 +580,7 @@ packages:
       name: rxdart
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.27.4"
+    version: "0.27.5"
   settings_repository:
     dependency: "direct main"
     description:

@@ -1,4 +1,5 @@
 import 'package:app_ui/app_ui.dart';
+import 'package:fitness/import/import.dart';
 import 'package:fitness/l10n/l10n.dart';
 import 'package:fitness/settings/settings.dart';
 import 'package:flutter/material.dart';
@@ -23,8 +24,19 @@ class SettingsView extends StatelessWidget {
             ),
             CheckboxListTile(
               value: false,
-              onChanged: (_) {},
+              onChanged: null,
               title: Text(l10n.notifications),
+            ),
+            ListTile(
+              title: Text(l10n.importData),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.of(context).push(ImportPage.route);
+              },
+            ),
+            ListTile(
+              title: Text(l10n.exportData),
+              trailing: const Icon(Icons.chevron_right),
             ),
           ],
         ),

@@ -32,5 +32,12 @@
     "notes": "Notes",
     "save": "Save",
     "cancel": "Cancel",
-    "delete": "Delete"
+    "delete": "Delete",
+    "activityPermissionsRationale": "The app needs access to your activity in order to show steps count",
+    "importData": "Import data",
+    "exportData": "Export data",
+    "selectFile": "Select file",
+    "skipEmpty": "Skip empty",
+    "firstRowHeader": "Treat first row as header",
+    "matchColumns": "Match columns"
 }

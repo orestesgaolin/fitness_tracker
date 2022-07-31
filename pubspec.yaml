@@ -32,6 +32,7 @@ dependencies:
   path_provider: ^2.0.11
   permissions_repository:
     path: packages/permissions_repository
+  pluto_grid: ^5.0.4
   settings_repository:
     path: packages/settings_repository
   syncfusion_flutter_charts: ^20.2.36
