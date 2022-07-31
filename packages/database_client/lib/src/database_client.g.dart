@@ -470,14 +470,18 @@ class ExerciseEntry extends DataClass implements Insertable<ExerciseEntry> {
   final int id;
   final String name;
   final DateTime timestamp;
+  final int duration;
   final DateTime created;
   final String note;
+  final String? type;
   ExerciseEntry(
       {required this.id,
       required this.name,
       required this.timestamp,
+      required this.duration,
       required this.created,
-      required this.note});
+      required this.note,
+      this.type});
   factory ExerciseEntry.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return ExerciseEntry(
@@ -487,10 +491,14 @@ class ExerciseEntry extends DataClass implements Insertable<ExerciseEntry> {
           .mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
       timestamp: const DateTimeType()
           .mapFromDatabaseResponse(data['${effectivePrefix}timestamp'])!,
+      duration: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}duration'])!,
       created: const DateTimeType()
           .mapFromDatabaseResponse(data['${effectivePrefix}created'])!,
       note: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}note'])!,
+      type: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}type']),
     );
   }
   @override
@@ -499,8 +507,12 @@ class ExerciseEntry extends DataClass implements Insertable<ExerciseEntry> {
     map['id'] = Variable<int>(id);
     map['name'] = Variable<String>(name);
     map['timestamp'] = Variable<DateTime>(timestamp);
+    map['duration'] = Variable<int>(duration);
     map['created'] = Variable<DateTime>(created);
     map['note'] = Variable<String>(note);
+    if (!nullToAbsent || type != null) {
+      map['type'] = Variable<String?>(type);
+    }
     return map;
   }
 
@@ -509,8 +521,10 @@ class ExerciseEntry extends DataClass implements Insertable<ExerciseEntry> {
       id: Value(id),
       name: Value(name),
       timestamp: Value(timestamp),
+      duration: Value(duration),
       created: Value(created),
       note: Value(note),
+      type: type == null && nullToAbsent ? const Value.absent() : Value(type),
     );
   }
 
@@ -521,8 +535,10 @@ class ExerciseEntry extends DataClass implements Insertable<ExerciseEntry> {
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
       timestamp: serializer.fromJson<DateTime>(json['timestamp']),
+      duration: serializer.fromJson<int>(json['duration']),
       created: serializer.fromJson<DateTime>(json['created']),
       note: serializer.fromJson<String>(json['note']),
+      type: serializer.fromJson<String?>(json['type']),
     );
   }
   @override
@@ -532,8 +548,10 @@ class ExerciseEntry extends DataClass implements Insertable<ExerciseEntry> {
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
       'timestamp': serializer.toJson<DateTime>(timestamp),
+      'duration': serializer.toJson<int>(duration),
       'created': serializer.toJson<DateTime>(created),
       'note': serializer.toJson<String>(note),
+      'type': serializer.toJson<String?>(type),
     };
   }
 
@@ -541,14 +559,18 @@ class ExerciseEntry extends DataClass implements Insertable<ExerciseEntry> {
           {int? id,
           String? name,
           DateTime? timestamp,
+          int? duration,
           DateTime? created,
-          String? note}) =>
+          String? note,
+          String? type}) =>
       ExerciseEntry(
         id: id ?? this.id,
         name: name ?? this.name,
         timestamp: timestamp ?? this.timestamp,
+        duration: duration ?? this.duration,
         created: created ?? this.created,
         note: note ?? this.note,
+        type: type ?? this.type,
       );
   @override
   String toString() {
@@ -556,14 +578,17 @@ class ExerciseEntry extends DataClass implements Insertable<ExerciseEntry> {
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('timestamp: $timestamp, ')
+          ..write('duration: $duration, ')
           ..write('created: $created, ')
-          ..write('note: $note')
+          ..write('note: $note, ')
+          ..write('type: $type')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, name, timestamp, created, note);
+  int get hashCode =>
+      Object.hash(id, name, timestamp, duration, created, note, type);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -571,44 +596,56 @@ class ExerciseEntry extends DataClass implements Insertable<ExerciseEntry> {
           other.id == this.id &&
           other.name == this.name &&
           other.timestamp == this.timestamp &&
+          other.duration == this.duration &&
           other.created == this.created &&
-          other.note == this.note);
+          other.note == this.note &&
+          other.type == this.type);
 }
 
 class ExerciseEntryModelCompanion extends UpdateCompanion<ExerciseEntry> {
   final Value<int> id;
   final Value<String> name;
   final Value<DateTime> timestamp;
+  final Value<int> duration;
   final Value<DateTime> created;
   final Value<String> note;
+  final Value<String?> type;
   const ExerciseEntryModelCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.timestamp = const Value.absent(),
+    this.duration = const Value.absent(),
     this.created = const Value.absent(),
     this.note = const Value.absent(),
+    this.type = const Value.absent(),
   });
   ExerciseEntryModelCompanion.insert({
     this.id = const Value.absent(),
     required String name,
     required DateTime timestamp,
+    this.duration = const Value.absent(),
     this.created = const Value.absent(),
     this.note = const Value.absent(),
+    this.type = const Value.absent(),
   })  : name = Value(name),
         timestamp = Value(timestamp);
   static Insertable<ExerciseEntry> custom({
     Expression<int>? id,
     Expression<String>? name,
     Expression<DateTime>? timestamp,
+    Expression<int>? duration,
     Expression<DateTime>? created,
     Expression<String>? note,
+    Expression<String?>? type,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (name != null) 'name': name,
       if (timestamp != null) 'timestamp': timestamp,
+      if (duration != null) 'duration': duration,
       if (created != null) 'created': created,
       if (note != null) 'note': note,
+      if (type != null) 'type': type,
     });
   }
 
@@ -616,14 +653,18 @@ class ExerciseEntryModelCompanion extends UpdateCompanion<ExerciseEntry> {
       {Value<int>? id,
       Value<String>? name,
       Value<DateTime>? timestamp,
+      Value<int>? duration,
       Value<DateTime>? created,
-      Value<String>? note}) {
+      Value<String>? note,
+      Value<String?>? type}) {
     return ExerciseEntryModelCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
       timestamp: timestamp ?? this.timestamp,
+      duration: duration ?? this.duration,
       created: created ?? this.created,
       note: note ?? this.note,
+      type: type ?? this.type,
     );
   }
 
@@ -639,11 +680,17 @@ class ExerciseEntryModelCompanion extends UpdateCompanion<ExerciseEntry> {
     if (timestamp.present) {
       map['timestamp'] = Variable<DateTime>(timestamp.value);
     }
+    if (duration.present) {
+      map['duration'] = Variable<int>(duration.value);
+    }
     if (created.present) {
       map['created'] = Variable<DateTime>(created.value);
     }
     if (note.present) {
       map['note'] = Variable<String>(note.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String?>(type.value);
     }
     return map;
   }
@@ -654,8 +701,10 @@ class ExerciseEntryModelCompanion extends UpdateCompanion<ExerciseEntry> {
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('timestamp: $timestamp, ')
+          ..write('duration: $duration, ')
           ..write('created: $created, ')
-          ..write('note: $note')
+          ..write('note: $note, ')
+          ..write('type: $type')
           ..write(')'))
         .toString();
   }
@@ -684,6 +733,13 @@ class $ExerciseEntryModelTable extends ExerciseEntryModel
   late final GeneratedColumn<DateTime?> timestamp = GeneratedColumn<DateTime?>(
       'timestamp', aliasedName, false,
       type: const IntType(), requiredDuringInsert: true);
+  final VerificationMeta _durationMeta = const VerificationMeta('duration');
+  @override
+  late final GeneratedColumn<int?> duration = GeneratedColumn<int?>(
+      'duration', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
   final VerificationMeta _createdMeta = const VerificationMeta('created');
   @override
   late final GeneratedColumn<DateTime?> created = GeneratedColumn<DateTime?>(
@@ -698,8 +754,14 @@ class $ExerciseEntryModelTable extends ExerciseEntryModel
       type: const StringType(),
       requiredDuringInsert: false,
       defaultValue: const Constant(''));
+  final VerificationMeta _typeMeta = const VerificationMeta('type');
   @override
-  List<GeneratedColumn> get $columns => [id, name, timestamp, created, note];
+  late final GeneratedColumn<String?> type = GeneratedColumn<String?>(
+      'type', aliasedName, true,
+      type: const StringType(), requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, name, timestamp, duration, created, note, type];
   @override
   String get aliasedName => _alias ?? 'exercise_entry_model';
   @override
@@ -724,6 +786,10 @@ class $ExerciseEntryModelTable extends ExerciseEntryModel
     } else if (isInserting) {
       context.missing(_timestampMeta);
     }
+    if (data.containsKey('duration')) {
+      context.handle(_durationMeta,
+          duration.isAcceptableOrUnknown(data['duration']!, _durationMeta));
+    }
     if (data.containsKey('created')) {
       context.handle(_createdMeta,
           created.isAcceptableOrUnknown(data['created']!, _createdMeta));
@@ -731,6 +797,10 @@ class $ExerciseEntryModelTable extends ExerciseEntryModel
     if (data.containsKey('note')) {
       context.handle(
           _noteMeta, note.isAcceptableOrUnknown(data['note']!, _noteMeta));
+    }
+    if (data.containsKey('type')) {
+      context.handle(
+          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
     }
     return context;
   }
@@ -960,6 +1030,7 @@ class $PedometerEntryModelTable extends PedometerEntryModel
 abstract class _$DatabaseImplementation extends GeneratedDatabase {
   _$DatabaseImplementation(QueryExecutor e)
       : super(SqlTypeSystem.defaultInstance, e);
+  _$DatabaseImplementation.connect(DatabaseConnection c) : super.connect(c);
   late final $WeightEntryModelTable weightEntryModel =
       $WeightEntryModelTable(this);
   late final $SettingsEntryModelTable settingsEntryModel =
