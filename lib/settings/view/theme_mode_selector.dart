@@ -38,8 +38,8 @@ class ThemeModeSelector extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.arrow_drop_down),
           Text(labels[state.themeMode]!),
+          const Icon(Icons.keyboard_arrow_down),
         ],
       ),
     );
