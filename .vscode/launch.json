@@ -42,6 +42,18 @@
       ]
     },
     {
+      "name": "Launch staging profile",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--flavor",
+        "staging",
+        "--target",
+        "lib/main.dart"
+      ]
+    },
+    {
       "name": "Launch production",
       "request": "launch",
       "type": "dart",
