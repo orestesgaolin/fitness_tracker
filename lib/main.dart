@@ -1,5 +1,6 @@
 import 'package:background_job_repository/background_job_repository.dart';
 import 'package:database_client/database_client.dart';
+import 'package:files_repository/files_repository.dart';
 import 'package:fitness/app/app.dart';
 import 'package:fitness/bootstrap.dart';
 import 'package:flutter/material.dart';
@@ -27,12 +28,14 @@ void main() {
     final settingsRepository =
         SettingsRepository(databaseClient.settingsResource);
     final settings = await settingsRepository.settings().first;
+    const filesRepository = FilesRepository();
     return App(
       initialSettings: settings,
       measurementsRepository: measurementsRepository,
       settingsRepository: settingsRepository,
       permissionsRepository: permissionsRepository,
       backgroundJobRepository: backgroundJobRepository,
+      filesRepository: filesRepository,
     );
   });
 }

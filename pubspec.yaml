@@ -18,6 +18,8 @@ dependencies:
   database_client:
     path: packages/database_client
   equatable: ^2.0.3
+  files_repository:
+    path: packages/files_repository
   flutter:
     sdk: flutter
   flutter_bloc: ^8.0.1

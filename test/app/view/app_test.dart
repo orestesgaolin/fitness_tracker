@@ -1,4 +1,5 @@
 import 'package:background_job_repository/background_job_repository.dart';
+import 'package:files_repository/files_repository.dart';
 import 'package:fitness/app/app.dart';
 import 'package:fitness/home/home.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -18,12 +19,15 @@ class MockPermissionsRepository extends Mock implements PermissionsRepository {}
 class MockBackgroundJobRepository extends Mock
     implements BackgroundJobRepository {}
 
+class MockFilesRepository extends Mock implements FilesRepository {}
+
 void main() {
   group('App', () {
     late MeasurementsRepository measurementsRepository;
     late SettingsRepository settingsRepository;
     late PermissionsRepository permissionsRepository;
     late BackgroundJobRepository backgroundJobRepository;
+    late FilesRepository filesRepository;
     final initialSettings = Settings(themeModeIndex: 0);
 
     setUp(() {
@@ -51,6 +55,8 @@ void main() {
       when(() => backgroundJobRepository.schedulePedometerRegistration())
           .thenAnswer((_) async => {});
 
+      filesRepository = MockFilesRepository();
+
       //See https://github.com/google/flutter.widgets/issues/12
       VisibilityDetectorController.instance.updateInterval = Duration.zero;
     });
@@ -63,6 +69,7 @@ void main() {
           settingsRepository: settingsRepository,
           permissionsRepository: permissionsRepository,
           backgroundJobRepository: backgroundJobRepository,
+          filesRepository: filesRepository,
         ),
       );
       expect(find.byType(HomePage), findsOneWidget);
